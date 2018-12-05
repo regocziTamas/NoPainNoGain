@@ -1,0 +1,10 @@
+package com.codecool.nopainnogain;
+
+import android.app.Application;
+
+
+
+public class App extends Application {
+
+
+}

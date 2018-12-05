@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RestDisplayFragment">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restDuration"
+        android:text="@string/hello_blank_fragment"
+        android:layout_centerInParent="true"
+        />
+
+    <ProgressBar
+        android:id="@+id/timeLeft"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:progress="100"
+        android:progressDrawable="@drawable/circle"
+        android:rotation="270" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Rest Time!"
+        android:layout_marginTop="100dp"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/nextExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="119dp"
+        android:text=""
+        android:textAlignment="center"
+        android:ellipsize="marquee"
+        android:textSize="18sp" />
+
+</RelativeLayout>

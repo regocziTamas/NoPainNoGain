@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.codecool.nopainnogain.WorkoutDetails">
+    <item
+        android:id="@+id/doWorkoutButton"
+        android:icon="@drawable/ic_play_button"
+        android:title="Start this workout"
+        app:showAsAction="always"/>
+
+</menu>

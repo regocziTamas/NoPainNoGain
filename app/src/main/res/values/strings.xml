@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">No Pain No Gain</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_workout_fragment_placeholder">My Workout fragment placeholder</string>
+    <string name="exercise_bank_placeholder">Exercise Bank placeholder</string>
+    <string name="title_activity_play_workout">PlayWorkout</string>
+    <string-array name="workoutTargetList">
+        <item>All</item>
+        <item>Chest</item>
+        <item>Back</item>
+        <item>Biceps</item>
+        <item>Triceps</item>
+        <item>Quads</item>
+        <item>Calves</item>
+        <item>Forearms</item>
+        <item>Shoulders</item>
+        <item>Abs</item>
+    </string-array>
+</resources>

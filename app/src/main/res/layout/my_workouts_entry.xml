@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        >
+
+        <RelativeLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent">
+            <TextView
+                android:id="@+id/myWorkoutsWorkoutTitle"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                tools:text="Placeholder"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:ellipsize="end"
+                android:maxLines="1">
+
+            </TextView>
+
+            <ImageView
+                android:id="@+id/entryPlayButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/myWorkoutsWorkoutTitle"
+                app:srcCompat="@drawable/ic_play_button"
+                android:maxWidth="35dp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
