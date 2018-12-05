@@ -17,7 +17,7 @@ public class InMemoryDataAccess implements DataAccess{
     List<Exercise> exercises = new ArrayList<>();
 
     public InMemoryDataAccess() {
-        populateData();
+        /*populateData();*/
     }
 
     @Override

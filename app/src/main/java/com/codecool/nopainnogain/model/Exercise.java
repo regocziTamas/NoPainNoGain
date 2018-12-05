@@ -3,25 +3,31 @@ package com.codecool.nopainnogain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "exercise")
 public class Exercise implements Parcelable{
 
-    private static Long idCounter = 0L;
-
+    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, columnName = "exercise_id")
+    private long id;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String description;
-
+    @DatabaseField
     private ExerciseTarget target;
 
-    private Long id;
 
     public Exercise(String name, String description, ExerciseTarget target) {
         this.name = name;
         this.description = description;
         this.target = target;
-        this.id = idCounter;
-        idCounter++;
+        /*this.id = idCounter;
+        idCounter++;*/
     }
+
+    public Exercise(){}
 
     public String getName() {
         return name;

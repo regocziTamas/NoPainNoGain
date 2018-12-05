@@ -1,0 +1,106 @@
+#
+# generated on 2018/12/05 08:07:21
+#
+# --table-start--
+dataClass=com.codecool.nopainnogain.model.Exercise
+tableName=exercise
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=exercise_id
+generatedId=true
+allowGeneratedIdInsert=true
+# --field-end--
+# --field-start--
+fieldName=name
+# --field-end--
+# --field-start--
+fieldName=description
+# --field-end--
+# --field-start--
+fieldName=target
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.codecool.nopainnogain.model.WorkoutBlock
+tableName=workoutblock
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=workout_block_id
+generatedId=true
+allowGeneratedIdInsert=true
+# --field-end--
+# --field-start--
+fieldName=exercises
+foreignCollection=true
+foreignCollectionEager=true
+foreignCollectionMaxEagerLevel=4
+# --field-end--
+# --field-start--
+fieldName=rests
+foreignCollection=true
+foreignCollectionEager=true
+foreignCollectionMaxEagerLevel=4
+# --field-end--
+# --field-start--
+fieldName=order
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.codecool.nopainnogain.model.Rest
+tableName=rest
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=rest_id
+generatedId=true
+allowGeneratedIdInsert=true
+# --field-end--
+# --field-start--
+fieldName=durationInMilis
+# --field-end--
+# --field-start--
+fieldName=containingBlock
+foreign=true
+# --field-end--
+# --field-start--
+fieldName=order
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.codecool.nopainnogain.model.WorkoutExercise
+tableName=workoutexercise
+# --table-fields-start--
+# --field-start--
+fieldName=id
+columnName=workoutExerciseId
+generatedId=true
+allowGeneratedIdInsert=true
+# --field-end--
+# --field-start--
+fieldName=reps
+# --field-end--
+# --field-start--
+fieldName=exercise
+canBeNull=false
+foreign=true
+foreignAutoRefresh=true
+maxForeignAutoRefreshLevel=10
+# --field-end--
+# --field-start--
+fieldName=containingBlock
+foreign=true
+# --field-end--
+# --field-start--
+fieldName=order
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
