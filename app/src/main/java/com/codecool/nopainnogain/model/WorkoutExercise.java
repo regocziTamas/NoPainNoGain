@@ -1,5 +1,6 @@
 package com.codecool.nopainnogain.model;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 

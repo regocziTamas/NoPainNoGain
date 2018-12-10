@@ -7,24 +7,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutBlock implements Parcelable{
-    private static Long idCounter = 0L;
 
-    private List<WorkoutComponent> components = new ArrayList<>();
+
+    private List<WorkoutExercise> exercises = new ArrayList<>();
+    private List<Rest> rests = new ArrayList<>();
     private Long id;
 
     public void addComponent(WorkoutComponent component){
-        components.add(component);
+
+        if(component instanceof WorkoutExercise){
+            WorkoutExercise temp = (WorkoutExercise) component;
+            exercises.add(temp);
+        } else if( component instanceof Rest){
+            Rest temp = (Rest) component;
+            rests.add(temp);
+        }
+
     }
 
     public List<WorkoutComponent> getComponents(){
-        return components;
+        List<WorkoutComponent> temp = new ArrayList<>();
+        temp.addAll(exercises);
+        temp.addAll(rests);
+        return temp;
     }
+
+
 
     @Override
     public String toString() {
         String toString = "";
 
-        for(WorkoutComponent comp: components){
+        for(WorkoutComponent comp: getComponents()){
             toString+=comp.toString()+"\n";
         }
         return toString;
@@ -37,13 +51,13 @@ public class WorkoutBlock implements Parcelable{
     /*Parcelable stuff below*/
 
     public WorkoutBlock(){
-        id = idCounter;
-        idCounter++;
+
     }
 
     protected WorkoutBlock(Parcel in) {
         id = in.readLong();
-        components = in.createTypedArrayList(WorkoutComponent.CREATOR);
+        exercises = in.createTypedArrayList(WorkoutExercise.CREATOR);
+        rests = in.createTypedArrayList(Rest.CREATOR);
     }
 
     public static final Creator<WorkoutBlock> CREATOR = new Creator<WorkoutBlock>() {
@@ -66,6 +80,7 @@ public class WorkoutBlock implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
-        parcel.writeTypedList(components);
+        parcel.writeTypedList(exercises);
+        parcel.writeTypedList(rests);
     }
 }

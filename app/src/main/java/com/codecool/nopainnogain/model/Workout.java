@@ -1,23 +1,25 @@
 package com.codecool.nopainnogain.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "workout")
 public class Workout implements Parcelable{
-    private static Long idCounter = 0L;
 
 
     private String title;
     private List<WorkoutBlock> blocks = new ArrayList<>();
+    @PrimaryKey(autoGenerate = true)
     private Long id;
 
 
     public Workout(String title) {
-        id = idCounter;
-        idCounter++;
+
         this.title = title;
     }
 
@@ -44,6 +46,14 @@ public class Workout implements Parcelable{
         return components;
     }
 
+    public List<WorkoutBlock> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<WorkoutBlock> blocks) {
+        this.blocks = blocks;
+    }
+
     @Override
     public String toString() {
         String toString = "\n";
@@ -57,6 +67,10 @@ public class Workout implements Parcelable{
 
     public String getTitle() {
         return title;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

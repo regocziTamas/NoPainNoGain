@@ -1,26 +1,27 @@
 package com.codecool.nopainnogain.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
+@Entity(tableName = "exercise")
 public class Exercise implements Parcelable{
 
-    private static Long idCounter = 0L;
+
 
     private String name;
     private String description;
 
     private ExerciseTarget target;
 
+    @PrimaryKey(autoGenerate = true)
     private Long id;
 
     public Exercise(String name, String description, ExerciseTarget target) {
         this.name = name;
         this.description = description;
         this.target = target;
-        this.id = idCounter;
-        idCounter++;
     }
 
     public String getName() {
