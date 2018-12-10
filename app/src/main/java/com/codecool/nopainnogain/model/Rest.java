@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class Rest extends WorkoutComponent implements Parcelable{
 
     int durationInMilis;
+    int order;
 
     public Rest(int durationInMilis) {
         this.durationInMilis = durationInMilis;
@@ -19,6 +20,14 @@ public class Rest extends WorkoutComponent implements Parcelable{
         this.durationInMilis = durationInMilis;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     @Override
     public String toString() {
         return durationInMilis/1000 + " seconds of rest";
@@ -29,6 +38,7 @@ public class Rest extends WorkoutComponent implements Parcelable{
     protected Rest(Parcel in) {
         super(in);
         durationInMilis = in.readInt();
+        order = in.readInt();
     }
 
     @Override
@@ -36,6 +46,7 @@ public class Rest extends WorkoutComponent implements Parcelable{
         dest.writeInt(2);
         super.writeToParcel(dest, flags);
         dest.writeInt(durationInMilis);
+        dest.writeInt(order);
     }
 
     @Override

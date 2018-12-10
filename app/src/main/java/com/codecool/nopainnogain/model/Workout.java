@@ -6,6 +6,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity(tableName = "workout")
@@ -29,6 +31,7 @@ public class Workout implements Parcelable{
     }
 
     public List<WorkoutBlock> getBlocksForListing(){
+        Collections.sort(blocks, new WorkoutBlockComparator());
         return blocks;
     }
 
@@ -47,7 +50,7 @@ public class Workout implements Parcelable{
     }
 
     public List<WorkoutBlock> getBlocks() {
-        return blocks;
+        return getBlocksForListing();
     }
 
     public void setBlocks(List<WorkoutBlock> blocks) {
@@ -116,4 +119,17 @@ public class Workout implements Parcelable{
             return new Workout[size];
         }
     };
+
+    class WorkoutBlockComparator implements Comparator<WorkoutBlock> {
+
+        @Override
+        public int compare(WorkoutBlock block, WorkoutBlock t1) {
+            return block.getOrder() - t1.getOrder();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return false;
+        }
+    }
 }

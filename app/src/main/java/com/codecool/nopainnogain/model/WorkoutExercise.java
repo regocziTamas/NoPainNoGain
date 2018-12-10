@@ -11,6 +11,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
 
     int reps;
     Exercise exercise;
+    int order;
 
 
     public WorkoutExercise(int reps, Exercise exercise) {
@@ -31,7 +32,13 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
         return reps + " x " + exercise.toString();
     }
 
+    public int getOrder() {
+        return order;
+    }
 
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     /*Parcelable stuff below*/
 
@@ -39,6 +46,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
         super(in);
         reps = in.readInt();
         exercise = in.readParcelable(Exercise.class.getClassLoader());
+        order = in.readInt();
     }
 
     @Override
@@ -47,6 +55,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
         super.writeToParcel(dest, flags);
         dest.writeInt(reps);
         dest.writeParcelable(exercise, flags);
+        dest.writeInt(order);
     }
 
     @Override

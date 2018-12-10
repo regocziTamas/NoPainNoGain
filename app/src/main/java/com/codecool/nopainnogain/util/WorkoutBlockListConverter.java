@@ -11,11 +11,8 @@ import java.util.List;
 public class WorkoutBlockListConverter {
     @TypeConverter
     public String fromBlockToString(List<WorkoutBlock> blocks){
-        System.out.println("im called to sttring");
-        System.out.println(blocks);
         Gson gson = new Gson();
         String string = gson.toJson(blocks);
-        System.out.println(string);
         return string;
     }
 
