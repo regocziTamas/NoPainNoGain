@@ -1,5 +1,5 @@
 #
-# generated on 2018/12/05 08:07:21
+# generated on 2018/12/10 01:58:59
 #
 # --table-start--
 dataClass=com.codecool.nopainnogain.model.Exercise
@@ -31,7 +31,6 @@ tableName=workoutblock
 fieldName=id
 columnName=workout_block_id
 generatedId=true
-allowGeneratedIdInsert=true
 # --field-end--
 # --field-start--
 fieldName=exercises
@@ -47,6 +46,10 @@ foreignCollectionMaxEagerLevel=4
 # --field-end--
 # --field-start--
 fieldName=order
+# --field-end--
+# --field-start--
+fieldName=workout
+foreign=true
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -70,6 +73,27 @@ foreign=true
 # --field-end--
 # --field-start--
 fieldName=order
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=com.codecool.nopainnogain.model.Workout
+tableName=workout
+# --table-fields-start--
+# --field-start--
+fieldName=title
+# --field-end--
+# --field-start--
+fieldName=blocks
+foreignCollection=true
+foreignCollectionEager=true
+foreignCollectionMaxEagerLevel=4
+# --field-end--
+# --field-start--
+fieldName=id
+columnName=workout_id
+generatedId=true
 # --field-end--
 # --table-fields-end--
 # --table-end--

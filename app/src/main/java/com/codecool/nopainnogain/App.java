@@ -5,6 +5,7 @@ import android.app.Application;
 import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.ExerciseTarget;
 import com.codecool.nopainnogain.model.Rest;
+import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.DatabaseHelper;
@@ -23,6 +24,8 @@ public class App extends Application {
     Dao<Exercise,Long> exercises;
     Dao<WorkoutExercise,Long> workoutExercises;
     Dao<Rest,Long> rests;
+    Dao<WorkoutBlock,Long> blocks;
+    Dao<Workout,Long> workouts;
 
     @Override
     public void onTerminate() {
@@ -43,6 +46,8 @@ public class App extends Application {
             exercises = DatabaseHelper.getStaticExDao();
             workoutExercises = DatabaseHelper.getStaticWexDao();
             rests = helper.getRestDao();
+            blocks = helper.getWorkoutBlockDao();
+            workouts = helper.getStaticWorkoutDao();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,15 +69,29 @@ public class App extends Application {
         Rest rest1 = new Rest(5000);
 
         WorkoutBlock testBlock = WorkoutBlock.newInstance();
+
         testBlock.addComponent(wex1);
         testBlock.addComponent(rest1);
         testBlock.addComponent(wex2);
 
+        /*WorkoutBlock testBlock2 = WorkoutBlock.newInstance();
+        testBlock2.addComponent(wex2);
+        testBlock2.addComponent(rest1);
+        testBlock2.addComponent(wex1);*/
+
+        Workout testWorkout = Workout.newInstance("Fuck me!");
+        testWorkout.addBlock(testBlock);
+
+
+
         try {
-            exercises.create(Arrays.asList(ex1,ex2,ex3,ex4,ex5,ex6,ex7,ex8,ex9));
+            /*exercises.create(Arrays.asList(ex1,ex2,ex3,ex4,ex5,ex6,ex7,ex8,ex9));
             workoutExercises.createOrUpdate(wex1);
             workoutExercises.createOrUpdate(wex2);
-            rests.create(rest1);
+            rests.create(rest1);*/
+            blocks.create(testBlock);
+            /*blocks.create(testBlock2);*/
+            workouts.createOrUpdate(testWorkout);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,21 +100,26 @@ public class App extends Application {
         List<Rest> testRestList = null;
         List<Exercise> testList = new ArrayList<>();
         List<WorkoutExercise> testWorkoutExerciseList = new ArrayList<>();
+        List<WorkoutBlock> blockAfterSql = new ArrayList<>();
+        List<Workout> workoutList = null;
 
         try {
-            test = exercises.queryForId(1L);
+            /*test = exercises.queryForId(1L);
             testList = exercises.queryForAll();
             testWorkoutExerciseList = workoutExercises.queryForAll();
             testRestList = rests.queryForAll();
+            blockAfterSql = blocks.queryForAll();*/
+            workoutList = workouts.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        System.out.println("SQL Test: " + test);
+        /*System.out.println("SQL Test: " + test);
         System.out.println(testList);
         System.out.println(testWorkoutExerciseList);
-        System.out.println(testRestList);
-        System.out.println(testBlock);
+        System.out.println(testRestList);*/
+        /*System.out.println(blockAfterSql);*/
+        System.out.println(workoutList);
 
     }
 

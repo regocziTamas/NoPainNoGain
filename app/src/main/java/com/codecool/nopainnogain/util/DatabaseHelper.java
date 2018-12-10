@@ -20,7 +20,7 @@ import com.j256.ormlite.table.TableUtils;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     private static final String DATABASE_NAME = "workout.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 475621;
 
     private Dao<Exercise,Long> exerciseDao = null;
     private Dao<WorkoutExercise,Long> workoutExerciseDao = null;
@@ -30,6 +30,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     private static Dao<WorkoutExercise,Long> staticWexDao = null;
     private static Dao<WorkoutBlock,Long> staticWorkoutBlockDao = null;
     private static Dao<Exercise,Long> staticExerciseDao = null;
+    private static Dao<Workout,Long> staticWorkoutDao = null;
 
 
     public DatabaseHelper(Context context) {
@@ -38,6 +39,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             staticWexDao = getDao(WorkoutExercise.class);
             staticWorkoutBlockDao = getDao(WorkoutBlock.class);
             staticExerciseDao = getDao(Exercise.class);
+            staticWorkoutDao = getDao(Workout.class);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,6 +53,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.createTable(connectionSource, WorkoutExercise.class);
             TableUtils.createTable(connectionSource, Rest.class);
             TableUtils.createTable(connectionSource, WorkoutBlock.class);
+            TableUtils.createTable(connectionSource, Workout.class);
         }catch (SQLException e){
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
         }
@@ -63,6 +66,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.dropTable(connectionSource,WorkoutExercise.class,true);
             TableUtils.dropTable(connectionSource,Rest.class,true);
             TableUtils.dropTable(connectionSource,WorkoutBlock.class,true);
+            TableUtils.dropTable(connectionSource,Workout.class,true);
         }catch (SQLException e){
             Log.e(DatabaseHelper.class.getName(), "Unable to upgrade database from version " + i + " to new "
                     + i1, e);
@@ -82,6 +86,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         }
 
         return workoutExerciseDao;
+    }
+
+    public Dao<Workout,Long> getStaticWorkoutDao(){
+        return staticWorkoutDao;
     }
 
     public Dao<Rest,Long> getRestDao() throws SQLException{
@@ -122,6 +130,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     }
 
+    public static Workout getNewWorkout(Workout workout){
+        Workout afterSQL = null;
+        try {
+            staticWorkoutDao.create(workout);
+            Long id = staticWorkoutDao.extractId(workout);
+            afterSQL = staticWorkoutDao.queryForId(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return afterSQL;
+    }
+
 
 
 
@@ -131,6 +151,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
             TableUtils.clearTable(getConnectionSource(),WorkoutExercise.class);
             TableUtils.clearTable(getConnectionSource(),WorkoutBlock.class);
             TableUtils.clearTable(getConnectionSource(),Rest.class);
+            TableUtils.clearTable(getConnectionSource(),Workout.class);
         }catch (SQLException e){
             e.printStackTrace();
         }

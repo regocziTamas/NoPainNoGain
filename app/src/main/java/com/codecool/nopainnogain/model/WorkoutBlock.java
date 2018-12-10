@@ -5,23 +5,19 @@ import android.os.Parcelable;
 
 import com.codecool.nopainnogain.util.DatabaseHelper;
 import com.codecool.nopainnogain.util.SerializationUtility;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.EagerForeignCollection;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class WorkoutBlock implements Parcelable{
 
-    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, columnName = "workout_block_id")
+    @DatabaseField(generatedId = true, columnName = "workout_block_id")
     private Long id;
     @ForeignCollectionField(eager = true, maxEagerLevel = 4)
     private ForeignCollection<WorkoutExercise> exercises;
@@ -29,6 +25,8 @@ public class WorkoutBlock implements Parcelable{
     private ForeignCollection<Rest> rests;
     @DatabaseField
     private int order;
+    @DatabaseField(foreign = true)
+    private Workout workout;
 
 
 
@@ -60,6 +58,10 @@ public class WorkoutBlock implements Parcelable{
 
     public static WorkoutBlock newInstance(){
         return DatabaseHelper.getNewWorkoutBlock();
+    }
+
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
     }
 
     @Override

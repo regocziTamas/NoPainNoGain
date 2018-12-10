@@ -104,7 +104,7 @@ public class CreateNewWorkout extends AppCompatActivity {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
                 WorkoutBlock block = data.getParcelableExtra("newBlock");
-                workout.replaceBlockById(block.getId(),block);
+                /*workout.replaceBlockById(block.getId(),block);*/
                 adapter.notifyDataSetChanged();
             }
         }

@@ -3,22 +3,38 @@ package com.codecool.nopainnogain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.codecool.nopainnogain.util.DatabaseHelper;
+import com.codecool.nopainnogain.util.SerializationUtility;
+import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
+@DatabaseTable(tableName = "workout")
 public class Workout implements Parcelable{
-    private static Long idCounter = 0L;
 
 
+    @DatabaseField
     private String title;
-    private List<WorkoutBlock> blocks = new ArrayList<>();
+    @ForeignCollectionField(eager = true, maxEagerLevel = 4)
+    private ForeignCollection<WorkoutBlock> blocks;
+    @DatabaseField(generatedId = true, columnName = "workout_id")
     private Long id;
 
 
     public Workout(String title) {
-        id = idCounter;
-        idCounter++;
         this.title = title;
+    }
+
+    public Workout(){
+
     }
 
 
@@ -27,26 +43,25 @@ public class Workout implements Parcelable{
     }
 
     public List<WorkoutBlock> getBlocksForListing(){
-        return blocks;
+        ArrayList<WorkoutBlock> temp = new ArrayList<>(blocks);
+        return temp;
     }
 
     public List<WorkoutComponent> getBlocksForWorkoutDisplay(){
-        List<WorkoutComponent> components = new ArrayList<>();
 
-        for(int i = 0; i < blocks.size(); i++){
-            /*if(i == 0){
-                components.add(new WorkoutStart());
-            }else{
-                components.add(new WorkoutBlockStart());
-            }*/
-            components.addAll(blocks.get(i).getComponents());
+        Iterator<WorkoutBlock> it = blocks.iterator();
+        List<WorkoutComponent> temp = new ArrayList<>();
+
+        while(it.hasNext()){
+             temp.addAll(it.next().getComponents());
         }
-        return components;
+
+        return temp;
     }
 
     @Override
     public String toString() {
-        String toString = "\n";
+        String toString = title + "\n";
 
         for(WorkoutBlock block: blocks){
             toString += block.toString();
@@ -63,13 +78,18 @@ public class Workout implements Parcelable{
         return id;
     }
 
-    public void replaceBlockById(Long id, WorkoutBlock newBlock){
+    public static Workout newInstance(String title){
+        return DatabaseHelper.getNewWorkout(new Workout(title));
+    }
+
+    /*public void replaceBlockById(Long id, WorkoutBlock newBlock){
         for(int i = 0; i < blocks.size(); i++){
             if(blocks.get(i).getId().equals(id)){
                 blocks.set(i,newBlock);
             }
         }
-    }
+
+    }*/
 
     /*Parcelable stuff below*/
 
@@ -82,13 +102,22 @@ public class Workout implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeLong(id);
         parcel.writeString(title);
-        parcel.writeTypedList(blocks);
+        try{
+            parcel.writeString(SerializationUtility.toString((Serializable)blocks));
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
+    @SuppressWarnings("unchecked")
     protected Workout(Parcel in) {
         id = in.readLong();
         title = in.readString();
-        blocks = in.createTypedArrayList(WorkoutBlock.CREATOR);
+        try{
+            blocks = (ForeignCollection<WorkoutBlock>) SerializationUtility.fromString(in.readString());
+        }catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     public static final Creator<Workout> CREATOR = new Creator<Workout>() {
