@@ -7,7 +7,7 @@ import android.os.Parcelable;
 
 
 
-public class WorkoutExercise extends WorkoutComponent implements Parcelable{
+public class WorkoutExercise extends WorkoutComponent{
 
     int reps;
     Exercise exercise;
@@ -29,7 +29,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
 
     @Override
     public String toString() {
-        return reps + " x " + exercise.getName() + " ID: " + exercise.getId();
+        return reps + " x " + exercise.getName();
     }
 
     public int getOrder() {
@@ -40,40 +40,6 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
         this.order = order;
     }
 
-    /*Parcelable stuff below*/
-
-    protected WorkoutExercise(Parcel in) {
-        super(in);
-        reps = in.readInt();
-        exercise = in.readParcelable(Exercise.class.getClass().getClassLoader());
-        order = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(1);
-        super.writeToParcel(dest, flags);
-        dest.writeInt(reps);
-        dest.writeParcelable(exercise, flags);
-        dest.writeInt(order);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<WorkoutExercise> CREATOR = new Creator<WorkoutExercise>() {
-        @Override
-        public WorkoutExercise createFromParcel(Parcel in) {
-            return new WorkoutExercise(in);
-        }
-
-        @Override
-        public WorkoutExercise[] newArray(int size) {
-            return new WorkoutExercise[size];
-        }
-    };
 
 
 

@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 @Entity(tableName = "exercise")
-public class Exercise implements Parcelable{
+public class Exercise{
 
 
 
@@ -52,48 +52,15 @@ public class Exercise implements Parcelable{
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "ID: "+ id + " "+ name;
     }
 
-    /*Parcelable stuff below*/
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
-        parcel.writeString(description);
-        parcel.writeString(target.name());
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    protected Exercise(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        description = in.readString();
-        target = ExerciseTarget.valueOf(in.readString());
-    }
 
 
-
-    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
-        @Override
-        public Exercise createFromParcel(Parcel in) {
-            return new Exercise(in);
-        }
-
-        @Override
-        public Exercise[] newArray(int size) {
-            return new Exercise[size];
-        }
-    };
 }

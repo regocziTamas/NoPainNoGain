@@ -15,7 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Entity(tableName = "workout")
-public class Workout implements Parcelable{
+public class Workout{
 
 
     private String title;
@@ -29,6 +29,9 @@ public class Workout implements Parcelable{
         this.title = title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public void addBlock(WorkoutBlock block){
         block.setOrder(blocks.size());
@@ -101,37 +104,7 @@ public class Workout implements Parcelable{
         }
     }
 
-    /*Parcelable stuff below*/
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(title);
-        parcel.writeTypedList(blocks);
-    }
-
-    protected Workout(Parcel in) {
-        id = in.readLong();
-        title = in.readString();
-        blocks = in.createTypedArrayList(WorkoutBlock.CREATOR);
-    }
-
-    public static final Creator<Workout> CREATOR = new Creator<Workout>() {
-        @Override
-        public Workout createFromParcel(Parcel in) {
-            return new Workout(in);
-        }
-
-        @Override
-        public Workout[] newArray(int size) {
-            return new Workout[size];
-        }
-    };
 
     class WorkoutBlockComparator implements Comparator<WorkoutBlock> {
 

@@ -35,6 +35,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
     public MyWorkoutsRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_workouts_entry,parent,false);
         return new ViewHolder(view);
+
     }
 
     @Override
@@ -59,6 +60,10 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
             }
         });
 
+    }
+
+    public void addToDataSet(Workout workout){
+        workoutList.add(workout);
     }
 
     @Override

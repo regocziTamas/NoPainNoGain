@@ -58,7 +58,7 @@ public class WorkoutDetails extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.doWorkoutButton){
             Intent intent = new Intent(WorkoutDetails.this,PlayWorkout.class);
-            intent.putExtra("workout",selectedWorkout);
+            intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

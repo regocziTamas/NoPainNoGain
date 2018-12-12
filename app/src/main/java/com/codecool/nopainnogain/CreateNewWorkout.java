@@ -104,18 +104,28 @@ public class CreateNewWorkout extends AppCompatActivity {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
                 WorkoutBlock block = WorkoutBlock.toWorkoutBlockObject(data.getStringExtra("newBlock"));
+                System.out.println("New block: " + block);
                 workout.replaceBlockById(block.getOrder(),block);
+                forceRedrawRecyclerview();
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private void forceRedrawRecyclerview(){
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(null);
+        recyclerView.getRecycledViewPool().clear();
+        recyclerView.swapAdapter(adapter,false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 
 
     @Override
     public void finish() {
-        System.out.println(workout);
         Intent returnIntent = getIntent();
+        workout.setTitle(editText.getText().toString());
         returnIntent.putExtra("newWorkout",Workout.toJsonString(workout));
         setResult(RESULT_OK,returnIntent);
         super.finish();

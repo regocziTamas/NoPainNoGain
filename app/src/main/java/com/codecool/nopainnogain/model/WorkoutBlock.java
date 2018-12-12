@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class WorkoutBlock implements Parcelable{
+public class WorkoutBlock{
 
 
     private List<WorkoutExercise> exercises = new ArrayList<>();
@@ -18,7 +18,7 @@ public class WorkoutBlock implements Parcelable{
     private int order;
 
     public void addComponent(WorkoutComponent component){
-
+        System.out.println("Addig component " + component + " Order: " + getNextOrder());
         if(component instanceof WorkoutExercise){
             WorkoutExercise temp = (WorkoutExercise) component;
             temp.setOrder(getNextOrder());
@@ -28,6 +28,8 @@ public class WorkoutBlock implements Parcelable{
             temp.setOrder(getNextOrder());
             rests.add(temp);
         }
+
+
 
     }
 
@@ -69,42 +71,7 @@ public class WorkoutBlock implements Parcelable{
         return new Gson().fromJson(string,new TypeToken<WorkoutBlock>(){}.getType());
     }
 
-    /*Parcelable stuff below*/
 
-    public WorkoutBlock(){
-
-    }
-
-    protected WorkoutBlock(Parcel in) {
-        order = in.readInt();
-        exercises = in.createTypedArrayList(WorkoutExercise.CREATOR);
-        rests = in.createTypedArrayList(Rest.CREATOR);
-
-    }
-
-    public static final Creator<WorkoutBlock> CREATOR = new Creator<WorkoutBlock>() {
-        @Override
-        public WorkoutBlock createFromParcel(Parcel in) {
-            return new WorkoutBlock(in);
-        }
-
-        @Override
-        public WorkoutBlock[] newArray(int size) {
-            return new WorkoutBlock[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(order);
-        parcel.writeTypedList(exercises);
-        parcel.writeTypedList(rests);
-    }
 
     class WorkoutComponentComparator implements java.util.Comparator<WorkoutComponent>{
 

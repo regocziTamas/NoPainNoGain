@@ -79,10 +79,12 @@ public class EditBlock extends AppCompatActivity {
             if(requestCode == REQUEST_CODE_REST_CREATE){
                 int newDuration = data.getIntExtra("newDuration",1000);
                 System.out.println(newDuration);
-                block.addComponent(new Rest(newDuration));
+                Rest newRest = new Rest(newDuration);
+                block.addComponent(newRest);
                 adapter.notifyDataSetChanged();
-                recyclerView.swapAdapter(new EditBlockRecyclerViewAdapter(this,block.getComponents(),this),true);
-                recyclerView.scrollBy(0,0);
+                /*recyclerView.swapAdapter(new EditBlockRecyclerViewAdapter(this,block.getComponents(),this),true);
+                recyclerView.scrollBy(0,0);*/
+                adapter.addComponentManually(newRest);
                 textView.setVisibility(View.GONE);
             }else if(requestCode == REQUEST_CODE_REST_EDIT){
                 int newDuration = data.getIntExtra("newDuration",1000);
