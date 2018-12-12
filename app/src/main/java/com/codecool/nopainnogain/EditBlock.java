@@ -35,7 +35,7 @@ public class EditBlock extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_block);
 
-        block = getIntent().getParcelableExtra("block");
+        block = WorkoutBlock.toWorkoutBlockObject(getIntent().getStringExtra("block"));
 
         textView = findViewById(R.id.editBlockPlaceholder);
         if(block.getComponents().size() == 0) {
@@ -78,11 +78,15 @@ public class EditBlock extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_CODE_REST_CREATE){
                 int newDuration = data.getIntExtra("newDuration",1000);
+                System.out.println(newDuration);
                 block.addComponent(new Rest(newDuration));
                 adapter.notifyDataSetChanged();
+                recyclerView.swapAdapter(new EditBlockRecyclerViewAdapter(this,block.getComponents(),this),true);
+                recyclerView.scrollBy(0,0);
                 textView.setVisibility(View.GONE);
             }else if(requestCode == REQUEST_CODE_REST_EDIT){
                 int newDuration = data.getIntExtra("newDuration",1000);
+                System.out.println(newDuration);
                 currentlyEdited.setDurationInMilis(newDuration);
                 adapter.notifyDataSetChanged();
             }
@@ -114,7 +118,7 @@ public class EditBlock extends AppCompatActivity {
     @Override
     public void finish() {
         Intent returnIntent = getIntent();
-        returnIntent.putExtra("newBlock",block);
+        returnIntent.putExtra("newBlock",WorkoutBlock.toJsonString(block));
         setResult(RESULT_OK,returnIntent);
         super.finish();
     }

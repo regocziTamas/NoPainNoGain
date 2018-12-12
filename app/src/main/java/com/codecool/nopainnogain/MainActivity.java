@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.codecool.nopainnogain.adapters.MainTabAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
+import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        dao = new InMemoryDataAccess();
+        dao = DatabaseDataAccess.getInstance();
     }
 
 

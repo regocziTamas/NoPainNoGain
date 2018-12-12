@@ -3,6 +3,9 @@ package com.codecool.nopainnogain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +15,6 @@ public class WorkoutBlock implements Parcelable{
 
     private List<WorkoutExercise> exercises = new ArrayList<>();
     private List<Rest> rests = new ArrayList<>();
-    private Long id;
     private int order;
 
     public void addComponent(WorkoutComponent component){
@@ -51,16 +53,20 @@ public class WorkoutBlock implements Parcelable{
         return toString;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public int getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setOrder(int id) {
+        this.order = id;
+    }
+
+    public static String toJsonString(WorkoutBlock block){
+        return new Gson().toJson(block);
+    }
+
+    public static WorkoutBlock toWorkoutBlockObject(String string){
+        return new Gson().fromJson(string,new TypeToken<WorkoutBlock>(){}.getType());
     }
 
     /*Parcelable stuff below*/
@@ -70,10 +76,10 @@ public class WorkoutBlock implements Parcelable{
     }
 
     protected WorkoutBlock(Parcel in) {
-        id = in.readLong();
+        order = in.readInt();
         exercises = in.createTypedArrayList(WorkoutExercise.CREATOR);
         rests = in.createTypedArrayList(Rest.CREATOR);
-        order = in.readInt();
+
     }
 
     public static final Creator<WorkoutBlock> CREATOR = new Creator<WorkoutBlock>() {
@@ -95,10 +101,9 @@ public class WorkoutBlock implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
+        parcel.writeInt(order);
         parcel.writeTypedList(exercises);
         parcel.writeTypedList(rests);
-        parcel.writeInt(order);
     }
 
     class WorkoutComponentComparator implements java.util.Comparator<WorkoutComponent>{

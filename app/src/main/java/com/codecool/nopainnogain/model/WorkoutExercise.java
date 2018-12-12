@@ -29,7 +29,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
 
     @Override
     public String toString() {
-        return reps + " x " + exercise.toString();
+        return reps + " x " + exercise.getName() + " ID: " + exercise.getId();
     }
 
     public int getOrder() {
@@ -45,7 +45,7 @@ public class WorkoutExercise extends WorkoutComponent implements Parcelable{
     protected WorkoutExercise(Parcel in) {
         super(in);
         reps = in.readInt();
-        exercise = in.readParcelable(Exercise.class.getClassLoader());
+        exercise = in.readParcelable(Exercise.class.getClass().getClassLoader());
         order = in.readInt();
     }
 

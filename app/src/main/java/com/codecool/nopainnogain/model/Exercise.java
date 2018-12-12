@@ -54,7 +54,7 @@ public class Exercise implements Parcelable{
 
     @Override
     public String toString() {
-        return name;
+        return "ID: "+ id + " "+ name;
     }
 
     /*Parcelable stuff below*/

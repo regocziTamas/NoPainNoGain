@@ -2,8 +2,12 @@ package com.codecool.nopainnogain.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +31,7 @@ public class Workout implements Parcelable{
 
 
     public void addBlock(WorkoutBlock block){
+        block.setOrder(blocks.size());
         blocks.add(block);
     }
 
@@ -57,9 +62,17 @@ public class Workout implements Parcelable{
         this.blocks = blocks;
     }
 
+    public static String toJsonString(Workout workout){
+        return new Gson().toJson(workout);
+    }
+
+    public static Workout toWorkoutObject(String string){
+        return new Gson().fromJson(string,new TypeToken<Workout>(){}.getType());
+    }
+
     @Override
     public String toString() {
-        String toString = "\n";
+        String toString = "ID: " + id + "\n";
 
         for(WorkoutBlock block: blocks){
             toString += block.toString();
@@ -80,9 +93,9 @@ public class Workout implements Parcelable{
         return id;
     }
 
-    public void replaceBlockById(Long id, WorkoutBlock newBlock){
+    public void replaceBlockById(int id, WorkoutBlock newBlock){
         for(int i = 0; i < blocks.size(); i++){
-            if(blocks.get(i).getId().equals(id)){
+            if(blocks.get(i).getOrder() == id){
                 blocks.set(i,newBlock);
             }
         }

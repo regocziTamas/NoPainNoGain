@@ -12,14 +12,11 @@ public class WorkoutBlockListConverter {
     @TypeConverter
     public String fromBlockToString(List<WorkoutBlock> blocks){
         Gson gson = new Gson();
-        String string = gson.toJson(blocks);
-        return string;
+        return gson.toJson(blocks);
     }
 
     @TypeConverter
     public List<WorkoutBlock> fromStringToWorkoutBlockList(String string){
-        System.out.println("im called to block");
-
         Gson gson = new Gson();
         return gson.fromJson(string, new TypeToken<List<WorkoutBlock>>(){}.getType());
     }

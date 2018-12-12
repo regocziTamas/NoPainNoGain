@@ -94,6 +94,7 @@ public class AddRest extends AppCompatActivity {
         public void onClick(View view) {
             Intent intent = getIntent();
             intent.putExtra("newDuration",getNewValue());
+            System.out.println("new duration from add rest " + getNewValue() );
             setResult(RESULT_OK,intent);
             finish();
         }

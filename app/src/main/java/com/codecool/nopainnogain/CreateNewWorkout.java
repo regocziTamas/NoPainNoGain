@@ -40,7 +40,7 @@ public class CreateNewWorkout extends AppCompatActivity {
         setContentView(R.layout.activity_create_new_workout);
         textView = findViewById(R.id.createNewWorkout);
 
-        this.workout = getIntent().getParcelableExtra("workout");
+        this.workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
         if(workout.getBlocksForListing().size() == 0){
             textView.setText("Click on the plus icon to add a new block");
         }else{
@@ -103,8 +103,8 @@ public class CreateNewWorkout extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
-                WorkoutBlock block = data.getParcelableExtra("newBlock");
-                workout.replaceBlockById(block.getId(),block);
+                WorkoutBlock block = WorkoutBlock.toWorkoutBlockObject(data.getStringExtra("newBlock"));
+                workout.replaceBlockById(block.getOrder(),block);
                 adapter.notifyDataSetChanged();
             }
         }
@@ -116,7 +116,7 @@ public class CreateNewWorkout extends AppCompatActivity {
     public void finish() {
         System.out.println(workout);
         Intent returnIntent = getIntent();
-        returnIntent.putExtra("newWorkout",workout);
+        returnIntent.putExtra("newWorkout",Workout.toJsonString(workout));
         setResult(RESULT_OK,returnIntent);
         super.finish();
     }

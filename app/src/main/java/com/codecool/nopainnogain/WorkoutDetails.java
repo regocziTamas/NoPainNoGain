@@ -13,6 +13,8 @@ import com.codecool.nopainnogain.adapters.MyWorkoutsWorkoutDetailsAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 import com.codecool.nopainnogain.model.Workout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class WorkoutDetails extends AppCompatActivity {
 
@@ -28,7 +30,7 @@ public class WorkoutDetails extends AppCompatActivity {
         setContentView(R.layout.activity_workout_details);
 
         Intent intent = getIntent();
-        selectedWorkout = intent.getParcelableExtra("workout");
+        selectedWorkout = Workout.toWorkoutObject(intent.getStringExtra("workout"));
 
 
         workoutTitle = findViewById(R.id.workoutDetailsTitle);

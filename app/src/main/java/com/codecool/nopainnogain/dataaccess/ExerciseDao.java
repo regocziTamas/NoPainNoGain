@@ -24,6 +24,9 @@ public interface ExerciseDao {
     @Query("DELETE FROM exercise")
     public void deleteAllExercises();
 
+    @Query("SELECT * FROM exercise WHERE id LIKE :searchedId")
+    public Exercise getExerciseById(long searchedId);
+
 
 
 }

@@ -58,6 +58,8 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return components.size();

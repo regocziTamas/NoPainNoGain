@@ -85,7 +85,7 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
                     Intent intent = new Intent(context, EditBlock.class);
                     /*currentBlock.addComponent(new WorkoutExercise(10,new Exercise("Pushup","djfdf", ExerciseTarget.Forearms)));
                     currentBlock.addComponent(new Rest(1000));*/
-                    intent.putExtra("block",currentBlock);
+                    intent.putExtra("block",WorkoutBlock.toJsonString(currentBlock));
                     ((CreateNewWorkout) context).startEditBlockActivity(intent);
                 }
             });
