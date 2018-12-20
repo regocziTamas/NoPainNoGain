@@ -85,4 +85,14 @@ public class MyWorkouts extends Fragment {
             }
         }
     }
+
+    public void updateRecyclerView(){
+        adapter.updateDataSet(dao.getAllWorkouts());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.updateDataSet(dao.getAllWorkouts());
+    }
 }

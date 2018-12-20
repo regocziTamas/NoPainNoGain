@@ -64,6 +64,7 @@ public class CreateNewWorkout extends AppCompatActivity {
             }
             adapter.addEmptyBlockToWorkout();
             adapter.notifyItemInserted(adapter.getItemCount());
+            forceRedrawRecyclerview();
         }
         return super.onOptionsItemSelected(item);
     }

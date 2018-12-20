@@ -109,6 +109,20 @@ public class EditBlock extends AppCompatActivity {
         }
     }
 
+    private void forceRedrawRecyclerview(){
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(null);
+        recyclerView.getRecycledViewPool().clear();
+        recyclerView.swapAdapter(adapter,false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        forceRedrawRecyclerview();
+    }
+
     public void startAddNewExercise(){
         Intent intent = new Intent(this,AddExercise.class);
         startActivityForResult(intent,REQUEST_CODE_EXERCISE_CREATE);
@@ -139,6 +153,7 @@ public class EditBlock extends AppCompatActivity {
     @Override
     public void finish() {
         Intent returnIntent = getIntent();
+        System.out.println("New Block from editBlock: " + block.toString());
         returnIntent.putExtra("newBlock",WorkoutBlock.toJsonString(block));
         setResult(RESULT_OK,returnIntent);
         super.finish();

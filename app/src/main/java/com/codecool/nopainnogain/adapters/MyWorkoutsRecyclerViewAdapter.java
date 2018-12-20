@@ -61,6 +61,11 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
 
     }
 
+    public void updateDataSet(List<Workout> workoutList){
+        this.workoutList = workoutList;
+        notifyDataSetChanged();
+    }
+
     public void addToDataSet(Workout workout){
         workoutList.add(workout);
     }

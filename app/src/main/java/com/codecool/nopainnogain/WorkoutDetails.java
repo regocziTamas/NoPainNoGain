@@ -1,6 +1,7 @@
 package com.codecool.nopainnogain;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.codecool.nopainnogain.adapters.MyWorkoutsWorkoutDetailsAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
+import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 import com.codecool.nopainnogain.model.Workout;
 import com.google.gson.Gson;
@@ -23,11 +25,14 @@ public class WorkoutDetails extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MyWorkoutsWorkoutDetailsAdapter adapter;
     private Workout selectedWorkout;
+    private int REQUEST_CODE_EDIT_WORKOUT = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_details);
+
+        dao = DatabaseDataAccess.getInstance();
 
         Intent intent = getIntent();
         selectedWorkout = Workout.toWorkoutObject(intent.getStringExtra("workout"));
@@ -41,10 +46,6 @@ public class WorkoutDetails extends AppCompatActivity {
         recyclerView = findViewById(R.id.workoutDetailsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-
-
-
     }
 
     @Override
@@ -60,7 +61,40 @@ public class WorkoutDetails extends AppCompatActivity {
             Intent intent = new Intent(WorkoutDetails.this,PlayWorkout.class);
             intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
             startActivity(intent);
+        }else if(id == R.id.editWorkout){
+            Intent intent = new Intent(WorkoutDetails.this,CreateNewWorkout.class);
+            intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
+            startActivityForResult(intent,REQUEST_CODE_EDIT_WORKOUT);
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            if(requestCode == REQUEST_CODE_EDIT_WORKOUT){
+                Workout workout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
+                System.out.println("Workout from myWorkouts: " + workout.toString());
+                adapter.newDataset(workout.getBlocksForListing());
+                forceRedrawRecyclerview();
+                notifyParentDatasetChanged();
+                dao.saveWorkout(workout);
+            }
+        }
+    }
+
+    private void forceRedrawRecyclerview(){
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(null);
+        recyclerView.getRecycledViewPool().clear();
+        recyclerView.swapAdapter(adapter,false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void notifyParentDatasetChanged(){
+        System.out.println("notifyparentdatasetchanged");
+
+    }
+
+
 }

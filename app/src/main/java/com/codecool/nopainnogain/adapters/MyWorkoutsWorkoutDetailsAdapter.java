@@ -60,6 +60,11 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         return new ViewHolder(view);
     }
 
+    public void newDataset(List<WorkoutBlock> workoutBlocks){
+        this.workoutBlocks = workoutBlocks;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
         final WorkoutBlock currentBlock = workoutBlocks.get(position);

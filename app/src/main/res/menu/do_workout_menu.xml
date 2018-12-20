@@ -8,5 +8,10 @@
         android:icon="@drawable/ic_play_button"
         android:title="Start this workout"
         app:showAsAction="always"/>
+    <item
+        android:title="Edit Workout"
+        android:id="@+id/editWorkout"
+        app:showAsAction="never"
+        />
 
 </menu>
