@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.codecool.nopainnogain.adapters.EditBlockRecyclerViewAdapter;
+import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.WorkoutBlock;
+import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.DragAndDropSwipeHelper;
 
 public class EditBlock extends AppCompatActivity {
@@ -22,13 +24,15 @@ public class EditBlock extends AppCompatActivity {
     private int REQUEST_CODE_REST_CREATE = 1;
     private int REQUEST_CODE_REST_EDIT = 2;
     private int REQUEST_CODE_EXERCISE_CREATE = 3;
+    private int REQUEST_CODE_EXERCISE_EDIT = 4;
 
     private TextView textView;
     private RecyclerView recyclerView;
     private EditBlockRecyclerViewAdapter adapter;
     private WorkoutBlock block;
 
-    private Rest currentlyEdited;
+    private Rest currentlyEditedRest;
+    private WorkoutExercise currentlyEditedWorkoutExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +89,20 @@ public class EditBlock extends AppCompatActivity {
                 textView.setVisibility(View.GONE);
             }else if(requestCode == REQUEST_CODE_REST_EDIT){
                 int newDuration = data.getIntExtra("newDuration",1000);
-                currentlyEdited.setDurationInMilis(newDuration);
+                currentlyEditedRest.setDurationInMilis(newDuration);
+                adapter.notifyDataSetChanged();
+            }else if(requestCode == REQUEST_CODE_EXERCISE_CREATE){
+                Exercise exercise = Exercise.toExerciseObject(data.getStringExtra("exercise"));
+                int reps = data.getIntExtra("reps",10);
+                WorkoutExercise workoutExercise = new WorkoutExercise(reps,exercise);
+                block.addComponent(workoutExercise);
+                adapter.notifyDataSetChanged();
+                adapter.addComponentManually(workoutExercise);
+            }else if(requestCode == REQUEST_CODE_EXERCISE_EDIT){
+                Exercise exercise = Exercise.toExerciseObject(data.getStringExtra("exercise"));
+                int reps = data.getIntExtra("reps",10);
+                currentlyEditedWorkoutExercise.setExercise(exercise);
+                currentlyEditedWorkoutExercise.setReps(reps);
                 adapter.notifyDataSetChanged();
             }
 
@@ -94,15 +111,21 @@ public class EditBlock extends AppCompatActivity {
 
     public void startAddNewExercise(){
         Intent intent = new Intent(this,AddExercise.class);
-        intent.putExtra("exerciseId",1L);
-        intent.putExtra("exerciseReps",10);
         startActivityForResult(intent,REQUEST_CODE_EXERCISE_CREATE);
+    }
+
+    public void startEditExercise(WorkoutExercise workoutExercise){
+        Intent intent = new Intent(this,AddExercise.class);
+        intent.putExtra("exercise",Exercise.toJsonString(workoutExercise.getExercise()));
+        intent.putExtra("reps",workoutExercise.getReps());
+        currentlyEditedWorkoutExercise = workoutExercise;
+        startActivityForResult(intent,REQUEST_CODE_EXERCISE_EDIT);
     }
 
     public void startEditRest(Rest rest) {
         Intent intent = new Intent(this,AddRest.class);
         intent.putExtra("initialDuration",rest.getDurationInMilis());
-        currentlyEdited = rest;
+        currentlyEditedRest = rest;
         startActivityForResult(intent,REQUEST_CODE_REST_EDIT);
     }
 

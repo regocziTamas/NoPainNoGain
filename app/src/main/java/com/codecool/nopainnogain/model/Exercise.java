@@ -5,6 +5,9 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 @Entity(tableName = "exercise")
 public class Exercise{
 
@@ -59,6 +62,14 @@ public class Exercise{
     @Override
     public String toString() {
         return "ID: "+ id + " "+ name;
+    }
+
+    public static String toJsonString(Exercise exercise){
+        return new Gson().toJson(exercise);
+    }
+
+    public static Exercise toExerciseObject(String string){
+        return new Gson().fromJson(string,new TypeToken<Exercise>(){}.getType());
     }
 
 

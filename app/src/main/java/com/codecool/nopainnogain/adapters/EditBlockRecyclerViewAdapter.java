@@ -43,9 +43,15 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WorkoutComponent comp = components.get(position);
         if(comp instanceof WorkoutExercise){
-            WorkoutExercise ex = (WorkoutExercise) comp;
+            final WorkoutExercise ex = (WorkoutExercise) comp;
             holder.exerciseName.setText(ex.getExercise().getName());
             holder.reps.setText(String.valueOf(ex.getReps()) + " reps");
+            holder.editComponent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editBlock.startEditExercise(ex);
+                }
+            });
         }else if(comp instanceof Rest){
             final Rest rest = (Rest) comp;
             holder.exerciseName.setText(String.valueOf(rest.getDurationInMilis()/1000) + " seconds of rest");

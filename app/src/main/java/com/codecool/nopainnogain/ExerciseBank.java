@@ -70,7 +70,7 @@ public class ExerciseBank extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         dao = DatabaseDataAccess.getInstance();
-        recyclerViewAdapter = new ExerciseBankRecyclerViewAdapter(this.getContext(),dao.getAllExercises());
+        recyclerViewAdapter = new ExerciseBankRecyclerViewAdapter(this.getContext(),dao.getAllExercises(),false);
 
         recyclerView = view.findViewById(R.id.exerciseBankRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -40,10 +40,13 @@ public class WorkoutExercise extends WorkoutComponent{
         this.order = order;
     }
 
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
 
-
-
-
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
+    }
 }
 
 
