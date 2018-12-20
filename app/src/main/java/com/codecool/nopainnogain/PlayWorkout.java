@@ -54,7 +54,6 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         setContentView(R.layout.activity_play_workout);
 
         Workout workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
-        System.out.println(workout);
         componentList = workout.getBlocksForWorkoutDisplay();
         currentPage = 0;
 

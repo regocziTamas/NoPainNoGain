@@ -31,10 +31,11 @@ public class AddExercise extends AppCompatActivity {
         done = findViewById(R.id.addExerciseDone);
 
         Intent intent = getIntent();
+
         long exerciseId = intent.getLongExtra("exerciseId",1L);
         int reps = intent.getIntExtra("exerciseReps",10);
 
-        exerciseName.setText(dao.getExerciseById(exerciseId).getName());
-        this.reps.setText(reps);
+        exerciseName.setText(dao.getExerciseByName("Push-up").getName());
+        this.reps.setText(String.valueOf(reps));
     }
 }

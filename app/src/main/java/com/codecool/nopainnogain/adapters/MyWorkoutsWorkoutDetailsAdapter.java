@@ -37,12 +37,14 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     boolean editable;
     Context context;
     private int REQUEST_CODE_EDIT_BLOCK = 101;
+    private Workout workout;
 
 
     public MyWorkoutsWorkoutDetailsAdapter(Context context, Workout workout, boolean editable){
         this.workoutBlocks = workout.getBlocksForListing();
         this.editable = editable;
         this.context = context;
+        this.workout = workout;
     }
 
     @NonNull
@@ -100,7 +102,8 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
 
 
     public void addEmptyBlockToWorkout(){
-        workoutBlocks.add(new WorkoutBlock());
+        workout.addBlock(new WorkoutBlock());
+        workoutBlocks = workout.getBlocksForListing();
         notifyDataSetChanged();
     }
 

@@ -27,6 +27,9 @@ public interface ExerciseDao {
     @Query("SELECT * FROM exercise WHERE id LIKE :searchedId")
     public Exercise getExerciseById(long searchedId);
 
+    @Query("SELECT * FROM exercise WHERE name Like :searchedName")
+    public Exercise getExerciseByName(String searchedName);
+
 
 
 }

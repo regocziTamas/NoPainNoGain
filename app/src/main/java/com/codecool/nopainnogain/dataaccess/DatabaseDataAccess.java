@@ -74,5 +74,10 @@ public class DatabaseDataAccess implements DataAccess {
         exerciseDao.insertExercise(exercise);
     }
 
+    @Override
+    public Exercise getExerciseByName(String name) {
+        return exerciseDao.getExerciseByName(name);
+    }
+
 
 }

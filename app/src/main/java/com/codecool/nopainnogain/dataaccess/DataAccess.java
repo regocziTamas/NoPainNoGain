@@ -19,4 +19,6 @@ public interface DataAccess {
 
     public void saveExercise(Exercise exercise);
 
+    public Exercise getExerciseByName(String name);
+
 }

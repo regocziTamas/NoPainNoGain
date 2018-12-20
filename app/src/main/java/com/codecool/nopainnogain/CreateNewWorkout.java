@@ -83,8 +83,6 @@ public class CreateNewWorkout extends AppCompatActivity {
         editText.setSingleLine();
         editText.setSelection(editText.getText().length());
 
-
-
         this.recyclerView = new RecyclerView(this);
         adapter = new MyWorkoutsWorkoutDetailsAdapter(this,workout,true);
 
@@ -104,7 +102,6 @@ public class CreateNewWorkout extends AppCompatActivity {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
                 WorkoutBlock block = WorkoutBlock.toWorkoutBlockObject(data.getStringExtra("newBlock"));
-                System.out.println("New block: " + block);
                 workout.replaceBlockById(block.getOrder(),block);
                 forceRedrawRecyclerview();
                 adapter.notifyDataSetChanged();

@@ -18,7 +18,6 @@ public class WorkoutBlock{
     private int order;
 
     public void addComponent(WorkoutComponent component){
-        System.out.println("Addig component " + component + " Order: " + getNextOrder());
         if(component instanceof WorkoutExercise){
             WorkoutExercise temp = (WorkoutExercise) component;
             temp.setOrder(getNextOrder());

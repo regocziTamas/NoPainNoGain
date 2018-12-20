@@ -70,6 +70,11 @@ public class InMemoryDataAccess implements DataAccess{
         exercises.add(exercise);
     }
 
+    @Override
+    public Exercise getExerciseByName(String name) {
+        return null;
+    }
+
     private void populateData() {
         Exercise ex1 = new Exercise("Push-up", "You do some push-ups, it is easy", ExerciseTarget.Chest);
         Exercise ex2 = new Exercise("Barbell Curl", "Stand up with your torso upright while holding a barbell at a shoulder-width grip. The palm of your hands should be facing forward and the elbows should be close to the torso. This will be your starting position.", ExerciseTarget.Biceps);

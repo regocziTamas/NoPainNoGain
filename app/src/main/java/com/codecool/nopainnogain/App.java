@@ -40,7 +40,6 @@ public class App extends Application {
             dao.saveExercise(e);
         }
 
-        System.out.println(dao.getAllExercises());
 
         WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));
         WorkoutExercise wex3 = new WorkoutExercise(10, dao.getAllExercises().get(0));
@@ -87,7 +86,6 @@ public class App extends Application {
         wb1.addComponent(wex5);
         wb1.addComponent(rest5);
 
-        System.out.println(wb1);
 
         WorkoutBlock wb2 = new WorkoutBlock();
         wb2.addComponent(wex6);

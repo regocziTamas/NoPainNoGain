@@ -78,17 +78,13 @@ public class EditBlock extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_CODE_REST_CREATE){
                 int newDuration = data.getIntExtra("newDuration",1000);
-                System.out.println(newDuration);
                 Rest newRest = new Rest(newDuration);
                 block.addComponent(newRest);
                 adapter.notifyDataSetChanged();
-                /*recyclerView.swapAdapter(new EditBlockRecyclerViewAdapter(this,block.getComponents(),this),true);
-                recyclerView.scrollBy(0,0);*/
                 adapter.addComponentManually(newRest);
                 textView.setVisibility(View.GONE);
             }else if(requestCode == REQUEST_CODE_REST_EDIT){
                 int newDuration = data.getIntExtra("newDuration",1000);
-                System.out.println(newDuration);
                 currentlyEdited.setDurationInMilis(newDuration);
                 adapter.notifyDataSetChanged();
             }

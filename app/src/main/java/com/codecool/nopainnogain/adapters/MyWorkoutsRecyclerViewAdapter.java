@@ -41,7 +41,6 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
     @Override
     public void onBindViewHolder(@NonNull final MyWorkoutsRecyclerViewAdapter.ViewHolder holder, int position) {
         final Workout selectedWorkout = workoutList.get(position);
-        /*System.out.println(selectedWorkout);*/
         holder.workoutTitle.setText(selectedWorkout.getTitle());
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

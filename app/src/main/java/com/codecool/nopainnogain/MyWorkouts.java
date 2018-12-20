@@ -62,7 +62,6 @@ public class MyWorkouts extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(),CreateNewWorkout.class);
                 Workout newWorkout = new Workout("New Workout");
-                System.out.println("get blocks for listing: " + newWorkout.getBlocksForListing());
                 intent.putExtra("workout",Workout.toJsonString(newWorkout));
                 startActivityForResult(intent,REQUEST_CODE_NEW_WORKOUT);
             }
