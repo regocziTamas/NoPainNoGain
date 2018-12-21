@@ -143,6 +143,10 @@ public class EditBlock extends AppCompatActivity {
         startActivityForResult(intent,REQUEST_CODE_REST_EDIT);
     }
 
+    public void deleteFromBlock(int order){
+        block.deleteComponentByOrder(order);
+    }
+
     public void startAddNewRest(){
         Intent intent = new Intent(this,AddRest.class);
         intent.putExtra("initialDuration",1000);
