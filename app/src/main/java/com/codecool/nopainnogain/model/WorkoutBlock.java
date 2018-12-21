@@ -70,7 +70,34 @@ public class WorkoutBlock{
         return new Gson().fromJson(string,new TypeToken<WorkoutBlock>(){}.getType());
     }
 
+    public void reorderComponents(){
+        for(int i = 0; i < getComponents().size(); i++){
+            WorkoutComponent component = getComponents().get(i);
+            if(component instanceof WorkoutExercise){
+                ((WorkoutExercise) component).setOrder(i);
+            }else if(component instanceof Rest){
+                ((Rest) component).setOrder(i);
+            }
+        }
+    }
 
+    public void deleteComponentByOrder(int i){
+        for(WorkoutExercise ex: exercises){
+            if(ex.getOrder() == i){
+                exercises.remove(ex);
+                reorderComponents();
+                return;
+            }
+        }
+
+        for(Rest rest: rests){
+            if(rest.getOrder() == i){
+                rests.remove(rest);
+                reorderComponents();
+                return;
+            }
+        }
+    }
 
     class WorkoutComponentComparator implements java.util.Comparator<WorkoutComponent>{
 

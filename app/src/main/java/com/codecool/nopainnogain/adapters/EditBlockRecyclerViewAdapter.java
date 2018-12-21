@@ -77,6 +77,7 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         components.remove(position);
+        ((EditBlock) context).deleteFromBlock(position);
         notifyItemRemoved(position);
     }
 
