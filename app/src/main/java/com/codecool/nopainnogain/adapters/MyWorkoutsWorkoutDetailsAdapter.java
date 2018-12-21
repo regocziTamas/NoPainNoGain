@@ -36,7 +36,6 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     List<WorkoutBlock> workoutBlocks;
     boolean editable;
     Context context;
-    private int REQUEST_CODE_EDIT_BLOCK = 101;
     private Workout workout;
 
 
@@ -61,9 +60,9 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     }
 
     public void newDataset(Workout newWorkout){
-        this.workoutBlocks = newWorkout.getBlocksForListing();
+        this.workout = newWorkout;
+        this.workoutBlocks = workout.getBlocksForListing();
         System.out.println("new dataset: " + workoutBlocks);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -73,7 +72,7 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         holder.blockTitle.setText("Exercise "+ (++position));
         CardView cardView = (CardView) ((RelativeLayout)holder.itemView).getChildAt(0);
         LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
-        /*clearLinearLayout(linearLayout);*/
+        clearLinearLayout(linearLayout);
 
         for(WorkoutComponent component: currentBlock.getComponents()){
             TextView text = new TextView(linearLayout.getContext());
