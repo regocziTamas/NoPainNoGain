@@ -56,6 +56,11 @@ public class InMemoryDataAccess implements DataAccess{
     }
 
     @Override
+    public void deleteWorkout(Workout workout) {
+
+    }
+
+    @Override
     public Exercise getExerciseById(long id) {
         for(Exercise exercise: exercises){
             if(exercise.getId().equals(id)){

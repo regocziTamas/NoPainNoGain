@@ -66,6 +66,9 @@ public class WorkoutDetails extends AppCompatActivity {
             Intent intent = new Intent(WorkoutDetails.this,CreateNewWorkout.class);
             intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
             startActivityForResult(intent,REQUEST_CODE_EDIT_WORKOUT);
+        }else if(id == R.id.deleteWorkout){
+            dao.deleteWorkout(selectedWorkout);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
