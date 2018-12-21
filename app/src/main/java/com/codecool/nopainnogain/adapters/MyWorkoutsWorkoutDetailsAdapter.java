@@ -36,14 +36,12 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     List<WorkoutBlock> workoutBlocks;
     boolean editable;
     Context context;
-    private Workout workout;
 
 
-    public MyWorkoutsWorkoutDetailsAdapter(Context context, Workout workout, boolean editable){
-        this.workoutBlocks = workout.getBlocksForListing();
+    public MyWorkoutsWorkoutDetailsAdapter(Context context, boolean editable){
+        this.workoutBlocks = new ArrayList<>();
         this.editable = editable;
         this.context = context;
-        this.workout = workout;
     }
 
     @NonNull
@@ -59,16 +57,15 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         return new ViewHolder(view);
     }
 
-    public void newDataset(Workout newWorkout){
-        this.workout = newWorkout;
-        this.workoutBlocks = workout.getBlocksForListing();
-        System.out.println("new dataset: " + workoutBlocks);
+    public void newDataset(List<WorkoutBlock> blocks){
+        workoutBlocks.clear();
+        workoutBlocks.addAll(blocks);
+        notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
         final WorkoutBlock currentBlock = workoutBlocks.get(position);
-        System.out.println("újra rajzolom bazdmeg");
         holder.blockTitle.setText("Exercise "+ (++position));
 
         StringBuilder exercisesString = new StringBuilder();
@@ -91,15 +88,10 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         }
     }
 
-
-
-    public void addEmptyBlockToWorkout(){
-        workout.addBlock(new WorkoutBlock());
-        workoutBlocks = workout.getBlocksForListing();
-        notifyDataSetChanged();
+    public void addEmptyBlockToWorkout(WorkoutBlock newBlock){
+        workoutBlocks.add(newBlock);
+        notifyItemInserted(workoutBlocks.size()-1);
     }
-
-
 
     @Override
     public int getItemCount() {

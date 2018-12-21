@@ -114,15 +114,6 @@ public class RestDisplayFragment extends Fragment {
 
     }
 
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            handleCountdown();
-        }
-
-    }*/
-
     @Override
     public void onPause() {
         super.onPause();

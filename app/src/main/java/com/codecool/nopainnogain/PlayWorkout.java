@@ -76,16 +76,27 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     @Override
     public void onFragmentInteraction() {
         mViewPager.setCurrentItem(++currentPage,true);
+        if(currentPage == componentList.size()){
+            finish();
+        }
     }
 
     @Override
     public void onTimesUp() {
         mViewPager.setCurrentItem(++currentPage,true);
+        if(currentPage == componentList.size()){
+            finish();
+        }
     }
 
     @Override
     public WorkoutComponent getNextExercise() {
-        return componentList.get(mViewPager.getCurrentItem());
+        int index = mViewPager.getCurrentItem()+2;
+        if(index < componentList.size()){
+            return componentList.get(index);
+        }else{
+            return null;
+        }
     }
 
     class CustomOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener{

@@ -1,6 +1,8 @@
 package com.codecool.nopainnogain;
 
+import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.constraint.ConstraintLayout;
@@ -10,8 +12,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,15 +44,29 @@ public class CreateNewWorkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_workout);
-        textView = findViewById(R.id.createNewWorkout);
 
-        this.workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
+        workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
+        textView = findViewById(R.id.createNewWorkout);
+        recyclerView = findViewById(R.id.createNewWorkoutRecyclerView);
+        editText = findViewById(R.id.workoutName);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MyWorkoutsWorkoutDetailsAdapter(this,true);
+        recyclerView.setAdapter(adapter);
+        adapter.newDataset(workout.getBlocksForListing());
+
+        editText.setText(workout.getTitle());
+
         if(workout.getBlocksForListing().size() == 0){
             textView.setText("Click on the plus icon to add a new block");
+            recyclerView.setVisibility(View.GONE);
+            editText.setVisibility(View.GONE);
         }else{
-            inflateView(workout.getTitle());
+            initializeActivityWithWorkout();
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,15 +79,14 @@ public class CreateNewWorkout extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             if(!layoutInitialized){
-                inflateView(workout.getTitle());
+                initializeActivityWithWorkout();
                 layoutInitialized = true;
             }
-            adapter.addEmptyBlockToWorkout();
-            adapter.notifyItemInserted(adapter.getItemCount());
+            WorkoutBlock newBlock = new WorkoutBlock();
+            workout.addBlock(newBlock);
+            adapter.addEmptyBlockToWorkout(newBlock);
             item.setEnabled(false);
             enableButtonAgain(item);
-
-            /*forceRedrawRecyclerview();*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -81,36 +98,16 @@ public class CreateNewWorkout extends AppCompatActivity {
             public void run() {
                 item.setEnabled(true);
             }
-        },1000);
+        },500);
     }
 
-    private void inflateView(String text){
-        LinearLayout layout = findViewById(R.id.createNewWorkoutRoot);
-        layout.removeViewAt(0);
-
-        LinearLayout.LayoutParams editTextLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        editTextLayout.setMarginStart(20);
-        editTextLayout.setMarginEnd(20);
-        editTextLayout.setMargins(20,40,40,20);
-
-        this.editText = new EditText(this);
-        editText.setLayoutParams(editTextLayout);
-        editText.setText(text);
-        editText.setSingleLine();
-        editText.setSelection(editText.getText().length());
-
-        this.recyclerView = new RecyclerView(this);
-        adapter = new MyWorkoutsWorkoutDetailsAdapter(this,workout,true);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new CustomAnimator());
-
-        layout.addView(editText);
-        layout.addView(recyclerView);
-
-        recyclerView.requestFocus();
+    private void initializeActivityWithWorkout(){
+        textView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        editText.setVisibility(View.VISIBLE);
+        forceRedrawRecyclerview();
     }
+
 
     public void startEditBlockActivity(Intent intent){
         startActivityForResult(intent,REQUEST_CODE_EDIT_BLOCK);
@@ -123,9 +120,8 @@ public class CreateNewWorkout extends AppCompatActivity {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
                 WorkoutBlock block = WorkoutBlock.toWorkoutBlockObject(data.getStringExtra("newBlock"));
-                System.out.println("visszatértem bazdmeg rajzold újra");
                 workout.replaceBlockById(block.getOrder(),block);
-                adapter.newDataset(workout);
+                adapter.newDataset(workout.getBlocksForListing());
                 adapter.notifyItemChanged(block.getOrder(),block);
             }
         }
@@ -151,10 +147,5 @@ public class CreateNewWorkout extends AppCompatActivity {
         super.finish();
     }
 
-    class CustomAnimator extends DefaultItemAnimator{
-        @Override
-        public boolean canReuseUpdatedViewHolder(RecyclerView.ViewHolder viewHolder) {
-            return true;
-        }
-    }
+
 }
