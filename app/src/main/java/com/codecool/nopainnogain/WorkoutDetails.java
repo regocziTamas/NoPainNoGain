@@ -1,7 +1,12 @@
 package com.codecool.nopainnogain;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,8 +71,33 @@ public class WorkoutDetails extends AppCompatActivity {
             Intent intent = new Intent(WorkoutDetails.this,CreateNewWorkout.class);
             intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
             startActivityForResult(intent,REQUEST_CODE_EDIT_WORKOUT);
+        }else if(id == R.id.deleteWorkout){
+            showDeleteConfirmationDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+
+    private void showDeleteConfirmationDialog(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Workout")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        dao.deleteWorkout(selectedWorkout);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setMessage("Are you sure you want to delete this workout?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
@@ -90,6 +120,8 @@ public class WorkoutDetails extends AppCompatActivity {
         recyclerView.swapAdapter(adapter,false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+
 
 
 

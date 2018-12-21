@@ -15,6 +15,8 @@ public interface DataAccess {
 
     public void saveWorkout(Workout workout);
 
+    public void deleteWorkout(Workout workout);
+
     public Exercise getExerciseById(long id);
 
     public void saveExercise(Exercise exercise);

@@ -13,5 +13,10 @@
         android:id="@+id/editWorkout"
         app:showAsAction="never"
         />
+    <item
+        android:title="Delete Workout"
+        android:id="@+id/deleteWorkout"
+        app:showAsAction="never"
+        />
 
 </menu>
