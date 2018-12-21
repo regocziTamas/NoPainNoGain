@@ -104,6 +104,7 @@ public class CreateNewWorkout extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new CustomAnimator());
 
         layout.addView(editText);
         layout.addView(recyclerView);
@@ -125,7 +126,7 @@ public class CreateNewWorkout extends AppCompatActivity {
                 System.out.println("visszatértem bazdmeg rajzold újra");
                 workout.replaceBlockById(block.getOrder(),block);
                 adapter.newDataset(workout);
-                forceRedrawRecyclerview();
+                adapter.notifyItemChanged(block.getOrder(),block);
             }
         }
     }
