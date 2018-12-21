@@ -1,67 +1,81 @@
 package com.codecool.nopainnogain.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.codecool.nopainnogain.util.DatabaseHelper;
-import com.codecool.nopainnogain.util.SerializationUtility;
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.ListIterator;
 
-@DatabaseTable(tableName = "workout")
-public class Workout implements Parcelable{
+@Entity(tableName = "workout")
+public class Workout{
 
 
-    @DatabaseField
     private String title;
-    @ForeignCollectionField(eager = true, maxEagerLevel = 4)
-    private ForeignCollection<WorkoutBlock> blocks;
-    @DatabaseField(generatedId = true, columnName = "workout_id")
+    private List<WorkoutBlock> blocks = new ArrayList<>();
+    @PrimaryKey(autoGenerate = true)
     private Long id;
 
 
     public Workout(String title) {
+
         this.title = title;
     }
 
-    public Workout(){
-
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-
     public void addBlock(WorkoutBlock block){
+        block.setOrder(blocks.size());
         blocks.add(block);
     }
 
     public List<WorkoutBlock> getBlocksForListing(){
-        ArrayList<WorkoutBlock> temp = new ArrayList<>(blocks);
-        return temp;
+        Collections.sort(blocks, new WorkoutBlockComparator());
+        return blocks;
     }
 
     public List<WorkoutComponent> getBlocksForWorkoutDisplay(){
+        List<WorkoutComponent> components = new ArrayList<>();
 
-        Iterator<WorkoutBlock> it = blocks.iterator();
-        List<WorkoutComponent> temp = new ArrayList<>();
-
-        while(it.hasNext()){
-             temp.addAll(it.next().getComponents());
+        for(int i = 0; i < blocks.size(); i++){
+            /*if(i == 0){
+                components.add(new WorkoutStart());
+            }else{
+                components.add(new WorkoutBlockStart());
+            }*/
+            components.addAll(blocks.get(i).getComponents());
         }
+        return components;
+    }
 
-        return temp;
+    public List<WorkoutBlock> getBlocks() {
+        return getBlocksForListing();
+    }
+
+    public void setBlocks(List<WorkoutBlock> blocks) {
+        this.blocks = blocks;
+    }
+
+    public static String toJsonString(Workout workout){
+        return new Gson().toJson(workout);
+    }
+
+    public static Workout toWorkoutObject(String string){
+        return new Gson().fromJson(string,new TypeToken<Workout>(){}.getType());
     }
 
     @Override
     public String toString() {
-        String toString = title + "\n";
+        String toString = "ID: " + id + "\n";
 
         for(WorkoutBlock block: blocks){
             toString += block.toString();
@@ -74,61 +88,34 @@ public class Workout implements Parcelable{
         return title;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public static Workout newInstance(String title){
-        return DatabaseHelper.getNewWorkout(new Workout(title));
-    }
-
-    /*public void replaceBlockById(Long id, WorkoutBlock newBlock){
+    public void replaceBlockById(int id, WorkoutBlock newBlock){
         for(int i = 0; i < blocks.size(); i++){
-            if(blocks.get(i).getId().equals(id)){
+            if(blocks.get(i).getOrder() == id){
                 blocks.set(i,newBlock);
             }
         }
-
-    }*/
-
-    /*Parcelable stuff below*/
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(title);
-        try{
-            parcel.writeString(SerializationUtility.toString((Serializable)blocks));
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
 
-    @SuppressWarnings("unchecked")
-    protected Workout(Parcel in) {
-        id = in.readLong();
-        title = in.readString();
-        try{
-            blocks = (ForeignCollection<WorkoutBlock>) SerializationUtility.fromString(in.readString());
-        }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
-        }
-    }
 
-    public static final Creator<Workout> CREATOR = new Creator<Workout>() {
+    class WorkoutBlockComparator implements Comparator<WorkoutBlock> {
+
         @Override
-        public Workout createFromParcel(Parcel in) {
-            return new Workout(in);
+        public int compare(WorkoutBlock block, WorkoutBlock t1) {
+            return block.getOrder() - t1.getOrder();
         }
 
         @Override
-        public Workout[] newArray(int size) {
-            return new Workout[size];
+        public boolean equals(Object o) {
+            return false;
         }
-    };
+    }
 }

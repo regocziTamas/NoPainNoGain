@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.codecool.nopainnogain.adapters.ExerciseBankRecyclerViewAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
+import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 
 
@@ -68,8 +69,8 @@ public class ExerciseBank extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        dao = new InMemoryDataAccess();
-        recyclerViewAdapter = new ExerciseBankRecyclerViewAdapter(this.getContext(),dao.getAllExercises());
+        dao = DatabaseDataAccess.getInstance();
+        recyclerViewAdapter = new ExerciseBankRecyclerViewAdapter(this.getContext(),dao.getAllExercises(),false);
 
         recyclerView = view.findViewById(R.id.exerciseBankRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

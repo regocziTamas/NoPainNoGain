@@ -34,7 +34,8 @@
             android:label="Create New Workout" />
         <activity android:name=".EditBlock" />
         <activity android:name=".AddRest" />
-        <activity android:name=".AddExercise"/>
+        <activity android:name=".AddExercise" />
+        <activity android:name=".SelectNewExercise"></activity>
     </application>
 
 </manifest>

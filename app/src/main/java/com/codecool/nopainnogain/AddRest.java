@@ -51,9 +51,6 @@ public class AddRest extends AppCompatActivity {
         int seconds = (milis / 1000) % 60 ;
         int minutes = ((milis / (1000*60)) % 60);
 
-        System.out.println(seconds);
-        System.out.println(minutes);
-
         this.minutes.setValue(minutes);
         this.seconds.setValue(seconds);
 

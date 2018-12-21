@@ -31,6 +31,8 @@ import com.codecool.nopainnogain.model.WorkoutBlockStart;
 import com.codecool.nopainnogain.model.WorkoutComponent;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.NonSwipeableViewPager;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_workout);
 
-        Workout workout = getIntent().getParcelableExtra("workout");
+        Workout workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
         componentList = workout.getBlocksForWorkoutDisplay();
         currentPage = 0;
 
@@ -83,14 +85,6 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
 
     @Override
     public WorkoutComponent getNextExercise() {
-
-        if(currentPage == 0){
-            try {
-                return componentList.get(mViewPager.getCurrentItem() + 1);
-            } catch (IndexOutOfBoundsException e ){
-                return null;
-            }
-        }
         return componentList.get(mViewPager.getCurrentItem());
     }
 

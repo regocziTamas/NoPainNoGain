@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.codecool.nopainnogain.adapters.MyWorkoutsRecyclerViewAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
+import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.ExerciseTarget;
@@ -27,7 +28,7 @@ public class MyWorkouts extends Fragment {
 
     private int REQUEST_CODE_NEW_WORKOUT = 100;
 
-    private DataAccess dao = new InMemoryDataAccess();
+    private DataAccess dao;
     private MyWorkoutsRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
@@ -49,6 +50,7 @@ public class MyWorkouts extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        dao = DatabaseDataAccess.getInstance();
         adapter = new MyWorkoutsRecyclerViewAdapter(dao.getAllWorkouts(),getContext());
         recyclerView = view.findViewById(R.id.myWorkoutsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -59,8 +61,8 @@ public class MyWorkouts extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(),CreateNewWorkout.class);
-                Workout workout = new Workout("New Workout");
-                intent.putExtra("workout",workout);
+                Workout newWorkout = new Workout("New Workout");
+                intent.putExtra("workout",Workout.toJsonString(newWorkout));
                 startActivityForResult(intent,REQUEST_CODE_NEW_WORKOUT);
             }
         });
@@ -76,10 +78,21 @@ public class MyWorkouts extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == -1){
             if(requestCode == REQUEST_CODE_NEW_WORKOUT){
-                Workout newWorkout = data.getParcelableExtra("newWorkout");
+                Workout newWorkout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
                 dao.saveWorkout(newWorkout);
+                adapter.addToDataSet(newWorkout);
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    public void updateRecyclerView(){
+        adapter.updateDataSet(dao.getAllWorkouts());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.updateDataSet(dao.getAllWorkouts());
     }
 }

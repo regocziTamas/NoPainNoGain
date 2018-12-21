@@ -17,4 +17,8 @@ public interface DataAccess {
 
     public Exercise getExerciseById(long id);
 
+    public void saveExercise(Exercise exercise);
+
+    public Exercise getExerciseByName(String name);
+
 }

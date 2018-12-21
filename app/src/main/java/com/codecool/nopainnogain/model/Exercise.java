@@ -1,33 +1,31 @@
 package com.codecool.nopainnogain.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-@DatabaseTable(tableName = "exercise")
-public class Exercise implements Parcelable{
+@Entity(tableName = "exercise")
+public class Exercise{
 
-    @DatabaseField(generatedId = true, allowGeneratedIdInsert = true, columnName = "exercise_id")
-    private long id;
-    @DatabaseField
+
+
     private String name;
-    @DatabaseField
     private String description;
-    @DatabaseField
+
     private ExerciseTarget target;
 
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
 
     public Exercise(String name, String description, ExerciseTarget target) {
         this.name = name;
         this.description = description;
         this.target = target;
-        /*this.id = idCounter;
-        idCounter++;*/
     }
-
-    public Exercise(){}
 
     public String getName() {
         return name;
@@ -57,48 +55,23 @@ public class Exercise implements Parcelable{
         return id;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    /*Parcelable stuff below*/
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
-        parcel.writeString(description);
-        parcel.writeString(target.name());
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    protected Exercise(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        description = in.readString();
-        target = ExerciseTarget.valueOf(in.readString());
+    @Override
+    public String toString() {
+        return "ID: "+ id + " "+ name;
+    }
+
+    public static String toJsonString(Exercise exercise){
+        return new Gson().toJson(exercise);
+    }
+
+    public static Exercise toExerciseObject(String string){
+        return new Gson().fromJson(string,new TypeToken<Exercise>(){}.getType());
     }
 
 
 
-    public static final Creator<Exercise> CREATOR = new Creator<Exercise>() {
-        @Override
-        public Exercise createFromParcel(Parcel in) {
-            return new Exercise(in);
-        }
-
-        @Override
-        public Exercise[] newArray(int size) {
-            return new Exercise[size];
-        }
-    };
 }

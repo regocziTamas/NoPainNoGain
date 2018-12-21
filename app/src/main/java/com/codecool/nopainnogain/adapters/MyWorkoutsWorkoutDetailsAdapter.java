@@ -36,13 +36,14 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     List<WorkoutBlock> workoutBlocks;
     boolean editable;
     Context context;
-    private int REQUEST_CODE_EDIT_BLOCK = 101;
+    private Workout workout;
 
 
     public MyWorkoutsWorkoutDetailsAdapter(Context context, Workout workout, boolean editable){
         this.workoutBlocks = workout.getBlocksForListing();
         this.editable = editable;
         this.context = context;
+        this.workout = workout;
     }
 
     @NonNull
@@ -58,9 +59,16 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         return new ViewHolder(view);
     }
 
+    public void newDataset(Workout newWorkout){
+        this.workout = newWorkout;
+        this.workoutBlocks = workout.getBlocksForListing();
+        System.out.println("new dataset: " + workoutBlocks);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull final MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
         final WorkoutBlock currentBlock = workoutBlocks.get(position);
+        System.out.println("újra rajzolom bazdmeg");
         holder.blockTitle.setText("Exercise "+ (++position));
         CardView cardView = (CardView) ((RelativeLayout)holder.itemView).getChildAt(0);
         LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
@@ -69,7 +77,6 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         for(WorkoutComponent component: currentBlock.getComponents()){
             TextView text = new TextView(linearLayout.getContext());
             text.setText(component.toString());
-            System.out.println(component.toString());
             text.setTextSize(15);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(35,10,0,0);
@@ -83,9 +90,7 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, EditBlock.class);
-                    /*currentBlock.addComponent(new WorkoutExercise(10,new Exercise("Pushup","djfdf", ExerciseTarget.Forearms)));
-                    currentBlock.addComponent(new Rest(1000));*/
-                    intent.putExtra("block",currentBlock);
+                    intent.putExtra("block",WorkoutBlock.toJsonString(currentBlock));
                     ((CreateNewWorkout) context).startEditBlockActivity(intent);
                 }
             });
@@ -100,8 +105,11 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         }
     }
 
+
+
     public void addEmptyBlockToWorkout(){
-        workoutBlocks.add(new WorkoutBlock());
+        workout.addBlock(new WorkoutBlock());
+        workoutBlocks = workout.getBlocksForListing();
         notifyDataSetChanged();
     }
 
