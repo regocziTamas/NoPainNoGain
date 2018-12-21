@@ -57,6 +57,17 @@ public class Workout{
         return components;
     }
 
+    public boolean isEmpty(){
+        boolean empty = true;
+        for(WorkoutBlock block: blocks){
+            if(!block.getComponents().isEmpty()){
+                empty = false;
+                break;
+            }
+        }
+        return empty;
+    }
+
     public List<WorkoutBlock> getBlocks() {
         return getBlocksForListing();
     }

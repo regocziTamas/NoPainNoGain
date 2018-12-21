@@ -41,7 +41,8 @@ public class WorkoutDetails extends AppCompatActivity {
         workoutTitle = findViewById(R.id.workoutDetailsTitle);
         workoutTitle.setText(selectedWorkout.getTitle());
 
-        adapter = new MyWorkoutsWorkoutDetailsAdapter(this,selectedWorkout,false);
+        adapter = new MyWorkoutsWorkoutDetailsAdapter(this,false);
+        adapter.newDataset(selectedWorkout.getBlocksForListing());
 
         recyclerView = findViewById(R.id.workoutDetailsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,7 +75,7 @@ public class WorkoutDetails extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_CODE_EDIT_WORKOUT){
                 Workout workout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
-                adapter.newDataset(workout);
+                adapter.newDataset(workout.getBlocksForListing());
                 selectedWorkout = workout;
                 forceRedrawRecyclerview();
                 dao.saveWorkout(workout);

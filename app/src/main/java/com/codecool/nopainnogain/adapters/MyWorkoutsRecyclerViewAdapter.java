@@ -45,6 +45,10 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(selectedWorkout.isEmpty()){
+                    Toast.makeText(context,"This workout is empty!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(holder.imageView.getContext(), PlayWorkout.class);
                 intent.putExtra("workout", Workout.toJsonString(selectedWorkout));
                 holder.imageView.getContext().startActivity(intent);
