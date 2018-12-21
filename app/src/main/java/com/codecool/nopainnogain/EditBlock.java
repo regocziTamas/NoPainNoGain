@@ -153,7 +153,6 @@ public class EditBlock extends AppCompatActivity {
     @Override
     public void finish() {
         Intent returnIntent = getIntent();
-        System.out.println("New Block from editBlock: " + block.toString());
         returnIntent.putExtra("newBlock",WorkoutBlock.toJsonString(block));
         setResult(RESULT_OK,returnIntent);
         super.finish();

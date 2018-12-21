@@ -60,18 +60,20 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
         return new ViewHolder(view);
     }
 
-    public void newDataset(List<WorkoutBlock> workoutBlocks){
-        this.workoutBlocks = workoutBlocks;
+    public void newDataset(Workout newWorkout){
+        this.workoutBlocks = newWorkout.getBlocksForListing();
+        System.out.println("new dataset: " + workoutBlocks);
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
         final WorkoutBlock currentBlock = workoutBlocks.get(position);
+        System.out.println("újra rajzolom bazdmeg");
         holder.blockTitle.setText("Exercise "+ (++position));
         CardView cardView = (CardView) ((RelativeLayout)holder.itemView).getChildAt(0);
         LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
-        clearLinearLayout(linearLayout);
+        /*clearLinearLayout(linearLayout);*/
 
         for(WorkoutComponent component: currentBlock.getComponents()){
             TextView text = new TextView(linearLayout.getContext());

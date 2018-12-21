@@ -74,10 +74,9 @@ public class WorkoutDetails extends AppCompatActivity {
         if(resultCode == RESULT_OK){
             if(requestCode == REQUEST_CODE_EDIT_WORKOUT){
                 Workout workout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
-                System.out.println("Workout from myWorkouts: " + workout.toString());
-                adapter.newDataset(workout.getBlocksForListing());
+                adapter.newDataset(workout);
+                selectedWorkout = workout;
                 forceRedrawRecyclerview();
-                notifyParentDatasetChanged();
                 dao.saveWorkout(workout);
             }
         }
@@ -91,10 +90,6 @@ public class WorkoutDetails extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void notifyParentDatasetChanged(){
-        System.out.println("notifyparentdatasetchanged");
-
-    }
 
 
 }

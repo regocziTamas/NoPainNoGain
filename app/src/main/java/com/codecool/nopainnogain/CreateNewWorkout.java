@@ -103,9 +103,10 @@ public class CreateNewWorkout extends AppCompatActivity {
         if(resultCode == RESULT_OK ){
             if(requestCode == REQUEST_CODE_EDIT_BLOCK){
                 WorkoutBlock block = WorkoutBlock.toWorkoutBlockObject(data.getStringExtra("newBlock"));
+                System.out.println("visszatértem bazdmeg rajzold újra");
                 workout.replaceBlockById(block.getOrder(),block);
+                adapter.newDataset(workout);
                 forceRedrawRecyclerview();
-                adapter.notifyDataSetChanged();
             }
         }
     }
@@ -116,6 +117,7 @@ public class CreateNewWorkout extends AppCompatActivity {
         recyclerView.getRecycledViewPool().clear();
         recyclerView.swapAdapter(adapter,false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.notifyDataSetChanged();
     }
 
 
