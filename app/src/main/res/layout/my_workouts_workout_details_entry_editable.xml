@@ -45,6 +45,15 @@
                     android:layout_toEndOf="@id/myWorkoutsWorkoutBlockTitle" />
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/exercises"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_marginHorizontal="15dp"
+                android:textSize="15sp"
+                android:lineSpacingExtra="10dp"/>
+
 
         </LinearLayout>
 

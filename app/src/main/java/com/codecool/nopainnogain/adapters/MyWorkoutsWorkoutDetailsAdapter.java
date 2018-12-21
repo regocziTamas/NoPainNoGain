@@ -66,23 +66,17 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyWorkoutsWorkoutDetailsAdapter.ViewHolder holder, int position) {
         final WorkoutBlock currentBlock = workoutBlocks.get(position);
         System.out.println("újra rajzolom bazdmeg");
         holder.blockTitle.setText("Exercise "+ (++position));
-        CardView cardView = (CardView) ((RelativeLayout)holder.itemView).getChildAt(0);
-        LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
-        clearLinearLayout(linearLayout);
 
+        StringBuilder exercisesString = new StringBuilder();
         for(WorkoutComponent component: currentBlock.getComponents()){
-            TextView text = new TextView(linearLayout.getContext());
-            text.setText(component.toString());
-            text.setTextSize(15);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(35,10,0,0);
-            text.setLayoutParams(params);
-            linearLayout.addView(text);
+            exercisesString.append(component.toString()).append("\n");
         }
+
+        holder.exercises.setText(exercisesString.toString());
 
         if(editable){
             ImageView editButton = holder.itemView.findViewById(R.id.editButton);
@@ -94,14 +88,6 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
                     ((CreateNewWorkout) context).startEditBlockActivity(intent);
                 }
             });
-        }
-    }
-
-    private void clearLinearLayout(LinearLayout layout){
-        for(int i = 0; i < layout.getChildCount(); i++){
-            if(i != 0){
-                layout.removeViewAt(i);
-            }
         }
     }
 
@@ -123,11 +109,13 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView blockTitle;
+        TextView exercises;
         View itemView;
 
         ViewHolder(View itemView) {
             super(itemView);
             blockTitle = itemView.findViewById(R.id.myWorkoutsWorkoutBlockTitle);
+            exercises = itemView.findViewById(R.id.exercises);
             this.itemView = itemView;
         }
     }
