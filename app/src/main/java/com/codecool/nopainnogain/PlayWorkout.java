@@ -75,6 +75,13 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.play_workout_menu, menu);
+        return true;
+    }
+
 
     @Override
     public void onFragmentInteraction() {

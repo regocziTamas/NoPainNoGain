@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.codecool.nopainnogain.adapters.MainTabAdapter;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private MainTabAdapter mainTabAdapter;
     private DataAccess dao;
+    private Menu menu;
 
     private int PLAY_WORKOUT_REQUEST_CODE = 1234;
 
@@ -58,12 +62,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if(id == R.id.continueInProgressWorkout){
+            System.out.println("shut up");
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -72,10 +80,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_CANCELED){
             if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
-                System.out.println("unfinished workout");
                 System.out.println(App.getCurrentWorkout());
                 System.out.println(App.getCurrentWorkoutCurrentPage());
+                MenuItem item = menu.getItem(0);
+                item.setVisible(true);
+
+
+
+                Animation anim = new AlphaAnimation(0.0f, 1.0f);
+                anim.setDuration(500); //You can manage the time of the blink with this parameter
+                anim.setStartOffset(20);
+                anim.setRepeatMode(Animation.REVERSE);
+                anim.setRepeatCount(Animation.INFINITE);
+
+
+                findViewById(R.id.continueInProgressWorkout).startAnimation(anim);
             }
         }
     }
+
+
 }
