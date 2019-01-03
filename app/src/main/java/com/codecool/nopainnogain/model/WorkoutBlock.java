@@ -81,6 +81,37 @@ public class WorkoutBlock{
         }
     }
 
+    public void cloneComponent(WorkoutComponent component){
+        if(component instanceof WorkoutExercise){
+            WorkoutExercise ex = (WorkoutExercise) component;
+            addComponent(new WorkoutExercise(ex.getReps(),ex.getExercise()));
+        }else if(component instanceof Rest){
+            Rest rest = (Rest) component;
+            addComponent(new Rest(rest.getDurationInMilis()));
+        }
+    }
+
+    public void swapTwoComponents(int order1, int order2){
+        for(WorkoutComponent component: getComponents()){
+            if(component instanceof  WorkoutExercise){
+                WorkoutExercise ex = (WorkoutExercise) component;
+                if(ex.getOrder() == order1){
+                    ex.setOrder(order2);
+                }else if(ex.getOrder() == order2){
+                    ex.setOrder(order1);
+                }
+            }
+            else if(component instanceof Rest){
+                Rest rest = (Rest) component;
+                if(rest.getOrder() == order1){
+                    rest.setOrder(order2);
+                }else if(rest.getOrder() == order2){
+                    rest.setOrder(order1);
+                }
+            }
+        }
+    }
+
     public void deleteComponentByOrder(int i){
         for(WorkoutExercise ex: exercises){
             if(ex.getOrder() == i){

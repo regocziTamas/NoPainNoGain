@@ -16,6 +16,7 @@ import com.codecool.nopainnogain.adapters.EditBlockRecyclerViewAdapter;
 import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.WorkoutBlock;
+import com.codecool.nopainnogain.model.WorkoutComponent;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.DragAndDropSwipeHelper;
 
@@ -53,6 +54,7 @@ public class EditBlock extends AppCompatActivity {
         recyclerView = findViewById(R.id.editBlockRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
 
         ItemTouchHelper.SimpleCallback dragAndDropSwipeHelper = new DragAndDropSwipeHelper(0, ItemTouchHelper.RIGHT,adapter);
         new ItemTouchHelper(dragAndDropSwipeHelper).attachToRecyclerView(recyclerView);
@@ -145,6 +147,14 @@ public class EditBlock extends AppCompatActivity {
 
     public void deleteFromBlock(int order){
         block.deleteComponentByOrder(order);
+    }
+
+    public void swapTwoComponentsInBlock(int order1, int order2){
+        block.swapTwoComponents(order1,order2);
+    }
+
+    public void cloneComponentToEnd(WorkoutComponent component){
+        block.cloneComponent(component);
     }
 
     public void startAddNewRest(){

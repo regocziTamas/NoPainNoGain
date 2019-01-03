@@ -3,7 +3,9 @@ package com.codecool.nopainnogain.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import com.codecool.nopainnogain.model.WorkoutComponent;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.DragAndDropSwipeHelper;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlockRecyclerViewAdapter.ViewHolder> implements DragAndDropSwipeHelper.DragAndDropSwipeHelperListener {
@@ -42,6 +45,9 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WorkoutComponent comp = components.get(position);
+
+        holder.itemView.setOnTouchListener(new DoubleTapHelper(comp));
+
         if(comp instanceof WorkoutExercise){
             final WorkoutExercise ex = (WorkoutExercise) comp;
             holder.exerciseName.setText(ex.getExercise().getName());
@@ -81,17 +87,72 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
         notifyItemRemoved(position);
     }
 
+    @Override
+    public void onDragAndDropped(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        int order1 = viewHolder.getAdapterPosition();
+        int order2 = target.getAdapterPosition();
+
+        System.out.println("From: " + order1 + " To: " + order2);
+
+        Collections.swap(components,order1,order2);
+        notifyItemMoved(order1,order2);
+
+        ((EditBlock) context).swapTwoComponentsInBlock(order1,order2);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView exerciseName;
         TextView reps;
         ImageView editComponent;
+        View itemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             exerciseName = itemView.findViewById(R.id.addBlockEntryExercise);
             reps = itemView.findViewById(R.id.addBlockEntryReps);
             editComponent = itemView.findViewById(R.id.editComponent);
         }
+    }
+
+    private class DoubleTapHelper implements View.OnTouchListener{
+
+        private WorkoutComponent component;
+
+        private DoubleTapHelper(WorkoutComponent component){
+            this.component = component;
+        }
+
+        private GestureDetector gestureDetector = new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if(component instanceof WorkoutExercise){
+                    WorkoutExercise ex = (WorkoutExercise) component;
+                    components.add(new WorkoutExercise(ex.getReps(),ex.getExercise()));
+                }else if(component instanceof Rest){
+                    Rest rest = (Rest) component;
+                    components.add(new Rest(rest.getDurationInMilis()));
+                }
+                notifyItemInserted(components.size()-1);
+                ((EditBlock)context).cloneComponentToEnd(component);
+
+                return super.onDoubleTap(e);
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+        });
+
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            gestureDetector.onTouchEvent(event);
+            return true;
+        }
+
+
     }
 }

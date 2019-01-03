@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codecool.nopainnogain.MainActivity;
+import com.codecool.nopainnogain.MyWorkouts;
 import com.codecool.nopainnogain.PlayWorkout;
 import com.codecool.nopainnogain.R;
 import com.codecool.nopainnogain.WorkoutDetails;
@@ -21,6 +24,8 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkoutsRecyclerViewAdapter.ViewHolder> {
+
+    private int PLAY_WORKOUT_REQUEST_CODE = 1234;
 
     private List<Workout> workoutList;
     private Context context;
@@ -51,7 +56,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
                 }
                 Intent intent = new Intent(holder.imageView.getContext(), PlayWorkout.class);
                 intent.putExtra("workout", Workout.toJsonString(selectedWorkout));
-                holder.imageView.getContext().startActivity(intent);
+                ((MainActivity) context).startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +64,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), WorkoutDetails.class);
                 intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
-                view.getContext().startActivity(intent);
+                context.startActivity(intent);
             }
         });
 

@@ -18,6 +18,24 @@ import java.util.Arrays;
 public class App extends Application {
 
     DataAccess dao;
+    private static Workout currentWorkout = null;
+    private static Integer currentWorkoutCurrentPage = null;
+
+    public static Workout getCurrentWorkout() {
+        return currentWorkout;
+    }
+
+    public static void setCurrentWorkout(Workout currentWorkout) {
+        App.currentWorkout = currentWorkout;
+    }
+
+    public static int getCurrentWorkoutCurrentPage() {
+        return currentWorkoutCurrentPage;
+    }
+
+    public static void setCurrentWorkoutCurrentPage(int currentWorkoutCurrentPage) {
+        App.currentWorkoutCurrentPage = currentWorkoutCurrentPage;
+    }
 
     @Override
     public void onCreate() {

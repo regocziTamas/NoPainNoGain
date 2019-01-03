@@ -54,6 +54,7 @@ public class CreateNewWorkout extends AppCompatActivity {
         adapter = new MyWorkoutsWorkoutDetailsAdapter(this,true);
         recyclerView.setAdapter(adapter);
         adapter.newDataset(workout.getBlocksForListing());
+        recyclerView.requestFocus();
 
         editText.setText(workout.getTitle());
 
@@ -146,6 +147,15 @@ public class CreateNewWorkout extends AppCompatActivity {
         setResult(RESULT_OK,returnIntent);
         super.finish();
     }
+
+    public void deleteBlockFromDisplayedWorkout(int order){
+        workout.deleteBlockByOrder(order);
+    }
+
+    public void swapTwoBlocksInDisplayedWorkout(int order1,int order2){
+        workout.swapBlocks(order1,order2);
+    }
+
 
 
 }

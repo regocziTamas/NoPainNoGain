@@ -1,5 +1,7 @@
 package com.codecool.nopainnogain;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private MainTabAdapter mainTabAdapter;
     private DataAccess dao;
 
+    private int PLAY_WORKOUT_REQUEST_CODE = 1234;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +64,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_CANCELED){
+            if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
+                System.out.println("unfinished workout");
+                System.out.println(App.getCurrentWorkout());
+                System.out.println(App.getCurrentWorkoutCurrentPage());
+            }
+        }
     }
 }

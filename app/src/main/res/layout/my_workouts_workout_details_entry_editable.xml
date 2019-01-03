@@ -22,13 +22,13 @@
             android:orientation="vertical"
             android:paddingBottom="15dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:id="@+id/workoutBlockHeader">
                 <TextView
                     android:id="@+id/myWorkoutsWorkoutBlockTitle"
-                    android:layout_width="300dp"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="12dp"
@@ -41,9 +41,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_edit_02"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/myWorkoutsWorkoutBlockTitle" />
-            </RelativeLayout>
+                    android:layout_gravity="center_vertical"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/popupMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/ic_ellipsis"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/exercises"
@@ -53,6 +64,8 @@
                 android:layout_marginHorizontal="15dp"
                 android:textSize="15sp"
                 android:lineSpacingExtra="10dp"/>
+
+
 
 
         </LinearLayout>

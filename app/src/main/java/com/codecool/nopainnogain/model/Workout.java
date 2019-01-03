@@ -68,6 +68,15 @@ public class Workout{
         return empty;
     }
 
+    public void deleteBlockByOrder(int order){
+        blocks.remove(order);
+    }
+
+    public void swapBlocks(int order1, int order2){
+        blocks.get(order1).setOrder(order2);
+        blocks.get(order2).setOrder(order1);
+    }
+
     public List<WorkoutBlock> getBlocks() {
         return getBlocksForListing();
     }

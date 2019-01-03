@@ -1,14 +1,18 @@
 package com.codecool.nopainnogain.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -29,6 +33,7 @@ import com.codecool.nopainnogain.model.WorkoutComponent;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWorkoutsWorkoutDetailsAdapter.ViewHolder> {
@@ -36,6 +41,7 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     List<WorkoutBlock> workoutBlocks;
     boolean editable;
     Context context;
+    PopupMenu popup;
 
 
     public MyWorkoutsWorkoutDetailsAdapter(Context context, boolean editable){
@@ -85,7 +91,87 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
                     ((CreateNewWorkout) context).startEditBlockActivity(intent);
                 }
             });
+            ImageView popupMenu = holder.itemView.findViewById(R.id.popupMenuButton);
+            popupMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMenu(v, currentBlock);
+                }
+            });
         }
+    }
+
+    private void showMenu(View v, WorkoutBlock block) {
+        popup = new PopupMenu(context, v);
+        final int blockOrder = block.getOrder();
+        System.out.println("Clicked block number: " + blockOrder);
+        popup.setOnMenuItemClickListener(null);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(menuItem.getItemId() == R.id.deleteBlock){
+                    showDeleteConfirmationDialog(blockOrder);
+                    return true;
+                }else if(menuItem.getItemId() == R.id.moveDown){
+                    if(blockOrder == workoutBlocks.size()-1){
+                        return false;
+                    }else{
+                        handleSwap(blockOrder,+1);
+                        return true;
+                    }
+
+                }else if(menuItem.getItemId() == R.id.moveUp){
+                    if(blockOrder == 0){
+                        return false;
+                    }else{
+                        handleSwap(blockOrder,-1);
+                        return true;
+                    }
+                }else{
+                    return false;
+                }
+            }
+
+        });
+        popup.inflate(R.menu.block_popover_menu);
+        popup.show();
+    }
+
+
+
+    private void handleSwap(int blockOrder, int direction){
+        ((CreateNewWorkout) context).swapTwoBlocksInDisplayedWorkout(blockOrder,blockOrder+direction);
+        Collections.swap(workoutBlocks,blockOrder+direction,blockOrder);
+
+        for(int i = 0; i < workoutBlocks.size();i++){
+            workoutBlocks.get(i).setOrder(i);
+        }
+
+        notifyItemMoved(blockOrder, blockOrder+direction);
+    }
+
+
+    private void showDeleteConfirmationDialog(final int blockOrder){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Block")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        workoutBlocks.remove(blockOrder);
+                        notifyItemRemoved(blockOrder);
+                        ((CreateNewWorkout)context).deleteBlockFromDisplayedWorkout(blockOrder);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setMessage("Are you sure you want to delete this block?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void addEmptyBlockToWorkout(WorkoutBlock newBlock){

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="Delete Block"
+        android:id="@+id/deleteBlock"
+        />
+
+    <item
+        android:title="Move Up"
+        android:id="@+id/moveUp"
+        />
+
+    <item
+        android:title="Move Down"
+        android:id="@+id/moveDown"
+        />
+
+</menu>

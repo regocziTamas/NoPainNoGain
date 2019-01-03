@@ -7,11 +7,13 @@ import android.app.FragmentTransaction;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +45,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     private PlayWorkoutAdapter adapter;
     private int currentPage;
     private List<WorkoutComponent> componentList;
+    private Workout workout;
 
     public PlayWorkout(){
 
@@ -53,7 +56,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_workout);
 
-        Workout workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
+        workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
         componentList = workout.getBlocksForWorkoutDisplay();
         currentPage = 0;
 
@@ -97,6 +100,14 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         }else{
             return null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        App.setCurrentWorkout(workout);
+        App.setCurrentWorkoutCurrentPage(currentPage);
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     class CustomOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener{

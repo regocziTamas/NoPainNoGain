@@ -42,7 +42,6 @@ public class WorkoutDetails extends AppCompatActivity {
         Intent intent = getIntent();
         selectedWorkout = Workout.toWorkoutObject(intent.getStringExtra("workout"));
 
-
         workoutTitle = findViewById(R.id.workoutDetailsTitle);
         workoutTitle.setText(selectedWorkout.getTitle());
 
