@@ -46,8 +46,11 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     private NonSwipeableViewPager mViewPager;
     private PlayWorkoutAdapter adapter;
     private int currentPage;
+    private int originalPageNumbering;
+    private CustomOnPageChangeListener customOnPageChangeListener;
     private List<WorkoutComponent> componentList;
     private Workout workout;
+    private boolean continued;
 
     public PlayWorkout(){
 
@@ -59,8 +62,16 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         setContentView(R.layout.activity_play_workout);
 
         workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
-        componentList = workout.getBlocksForWorkoutDisplay();
+
         currentPage = getIntent().getIntExtra("startingPage",0);
+        originalPageNumbering = currentPage;
+        if(currentPage == 0){
+            continued = false;
+        }else{
+            continued = true;
+        }
+        componentList = workout.getBlocksForWorkoutDisplay().subList(currentPage,workout.getBlocksForWorkoutDisplay().size());
+        currentPage = 0;
 
         App.setCurrentWorkout(workout);
         App.setCurrentWorkoutCurrentPage(currentPage);
@@ -70,28 +81,24 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
 
         mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(adapter);
-        final CustomOnPageChangeListener customOnPageChangeListener = new CustomOnPageChangeListener();
+        mViewPager.setOffscreenPageLimit(1);
+        customOnPageChangeListener = new CustomOnPageChangeListener();
         mViewPager.addOnPageChangeListener(customOnPageChangeListener);
 
-        if(currentPage != 0){
-            mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    mViewPager.setCurrentItem(currentPage,false);
-                }
-            });
-        }else{
-            mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    customOnPageChangeListener.onPageSelected(currentPage);
 
-                }
-            });
-        }
+        mViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                customOnPageChangeListener.onPageSelected(currentPage);
+
+            }
+        });
+
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,6 +126,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
                         setResult(RESULT_OK);
                         App.setCurrentWorkout(null);
                         App.setCurrentWorkoutCurrentPage(-1);
+                        App.setCurrentRestTimeLeft(-1L);
                         finish();
 
                     }
@@ -137,6 +145,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     @Override
     public void onFragmentInteraction() {
         mViewPager.setCurrentItem(++currentPage,true);
+        originalPageNumbering++;
         if(currentPage == componentList.size()){
             setResult(RESULT_OK);
             finish();
@@ -146,6 +155,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     @Override
     public void onTimesUp() {
         mViewPager.setCurrentItem(++currentPage,true);
+        originalPageNumbering++;
         if(currentPage == componentList.size()){
             setResult(RESULT_OK);
             finish();
@@ -154,17 +164,25 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
 
     @Override
     public WorkoutComponent getNextExercise() {
-        int index = mViewPager.getCurrentItem()+2;
-        if(index < componentList.size()){
-            return componentList.get(index);
-        }else{
-            return null;
+        int index = currentPage+1;
+        for(int i = index; i < componentList.size(); i++){
+            if(componentList.get(i) instanceof WorkoutExercise){
+                System.out.println(componentList.get(i));
+                return componentList.get(i);
+            }
         }
+        return null;
     }
 
     @Override
     public void onBackPressed() {
-        App.setCurrentWorkoutCurrentPage(currentPage);
+        App.setCurrentWorkoutCurrentPage(originalPageNumbering);
+        if(adapter.getItem(currentPage) instanceof RestDisplayFragment){
+            System.out.println("Its a rest!");
+            RestDisplayFragment currentRest = (RestDisplayFragment) adapter.getItem(currentPage);
+
+            App.setCurrentRestTimeLeft(currentRest.getCurrentTimeLeft());
+        }
         setResult(RESULT_CANCELED);
         finish();
     }
@@ -174,7 +192,11 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         public void onPageSelected(int position) {
             if(adapter.getItem(position) instanceof RestDisplayFragment){
                 RestDisplayFragment restDisplayFragment = (RestDisplayFragment) adapter.getItem(position);
-                restDisplayFragment.handleCountdown();
+                if(position == 0 && continued){
+                    restDisplayFragment.continueRest(App.getCurrentRestTimeLeft());
+                }else{
+                    restDisplayFragment.handleCountdown(1);
+                }
             }
         }
     }

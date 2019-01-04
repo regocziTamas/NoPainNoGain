@@ -20,6 +20,15 @@ public class App extends Application {
     DataAccess dao;
     private static Workout currentWorkout = null;
     private static Integer currentWorkoutCurrentPage = -1;
+    private static Long currentRestTimeLeft = -1L;
+
+    public static Long getCurrentRestTimeLeft() {
+        return currentRestTimeLeft;
+    }
+
+    public static void setCurrentRestTimeLeft(Long currentRestTimeLeft) {
+        App.currentRestTimeLeft = currentRestTimeLeft;
+    }
 
     public static Workout getCurrentWorkout() {
         return currentWorkout;

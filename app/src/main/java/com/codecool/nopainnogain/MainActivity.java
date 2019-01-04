@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 activateContinueWorkoutButton();
             }else{
                 System.out.println("User aborted workout, no need to keep the state");
+                App.setCurrentRestTimeLeft(-1L);
+                App.setCurrentWorkout(null);
+                App.setCurrentWorkoutCurrentPage(-1);
                 menu.getItem(0).setVisible(false);
             }
         }else if(requestCode == 100){

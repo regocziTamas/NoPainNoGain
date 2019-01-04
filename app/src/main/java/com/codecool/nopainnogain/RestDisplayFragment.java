@@ -23,7 +23,7 @@ public class RestDisplayFragment extends Fragment {
 
     private OnRestTimeUpListener mListener;
     private long duration;
-    private float currentTimeLeft;
+    private long currentTimeLeft;
     private TextView timeLeft;
     private CountDownTimer timer;
     private ProgressBar progressBar;
@@ -60,7 +60,8 @@ public class RestDisplayFragment extends Fragment {
 
         nextExerciseTextView = view.findViewById(R.id.nextExercise);
         WorkoutComponent component = mListener.getNextExercise();
-        if(component instanceof WorkoutExercise && component != null){
+        System.out.println("next exercise: " + component);
+        if(component instanceof WorkoutExercise){
             WorkoutExercise ex = (WorkoutExercise) component;
             nextExerciseTextView.setText("Coming up next:\n"+ ex.getReps() + " repetitions of " + ex.getExercise());
         }
@@ -88,20 +89,32 @@ public class RestDisplayFragment extends Fragment {
         mListener = null;
     }
 
+    public long getCurrentTimeLeft(){
+        return currentTimeLeft;
+    }
+
+    public void continueRest(long timeLeft){
+        float perc = (float) timeLeft/(float) duration;
+        System.out.println("timeleft " + timeLeft + " duration: " + duration + " perc: " + perc);
+        duration = timeLeft;
+        handleCountdown(perc);
+
+    }
+
 
     public interface OnRestTimeUpListener {
         void onTimesUp();
         WorkoutComponent getNextExercise();
     }
 
-    public void handleCountdown(){
+    public void handleCountdown(float startingPercentage){
         timeLeft.setText(String.valueOf(duration/1000));
-        startAnimation();
+        startAnimation(startingPercentage);
         timer = new CountDownTimer(duration,10) {
             @Override
             public void onTick(long l) {
+                currentTimeLeft = l;
                 float currentTime = l/1000F;
-                currentTimeLeft = currentTime;
                 timeLeft.setText(String.format(Locale.ENGLISH,"%.2f",currentTime));
             }
 
@@ -126,12 +139,13 @@ public class RestDisplayFragment extends Fragment {
     }
 
 
-    private void startAnimation() {
+    private void startAnimation(float startingPercentage) {
         int width = progressBar.getWidth();
         progressBar.setMax(width);
 
 
-        ValueAnimator animator = ValueAnimator.ofInt(width, 0);
+
+        ValueAnimator animator = ValueAnimator.ofInt(Math.round(width*startingPercentage), 0);
         animator.setInterpolator(new LinearInterpolator());
         animator.setStartDelay(0);
         animator.setDuration(duration);
