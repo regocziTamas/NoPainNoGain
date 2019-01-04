@@ -19,7 +19,7 @@ public class App extends Application {
 
     DataAccess dao;
     private static Workout currentWorkout = null;
-    private static Integer currentWorkoutCurrentPage = null;
+    private static Integer currentWorkoutCurrentPage = -1;
 
     public static Workout getCurrentWorkout() {
         return currentWorkout;

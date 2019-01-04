@@ -56,6 +56,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
                 }
                 Intent intent = new Intent(holder.imageView.getContext(), PlayWorkout.class);
                 intent.putExtra("workout", Workout.toJsonString(selectedWorkout));
+                intent.putExtra("startingPage",0);
                 ((MainActivity) context).startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
             }
         });

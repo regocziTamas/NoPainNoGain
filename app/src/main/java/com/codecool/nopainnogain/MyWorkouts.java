@@ -79,6 +79,7 @@ public class MyWorkouts extends Fragment {
         if(resultCode == -1){
             if(requestCode == REQUEST_CODE_NEW_WORKOUT){
                 Workout newWorkout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
+
                 dao.saveWorkout(newWorkout);
                 adapter.addToDataSet(newWorkout);
                 adapter.notifyDataSetChanged();

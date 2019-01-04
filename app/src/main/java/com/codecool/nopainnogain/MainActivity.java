@@ -28,6 +28,7 @@ import com.codecool.nopainnogain.adapters.MainTabAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
 import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
+import com.codecool.nopainnogain.model.Workout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,31 +71,46 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.continueInProgressWorkout){
-            System.out.println("shut up");
+            Intent intent = new Intent(MainActivity.this,PlayWorkout.class);
+            intent.putExtra("startingPage",App.getCurrentWorkoutCurrentPage());
+            intent.putExtra("workout", Workout.toJsonString(App.getCurrentWorkout()));
+            startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void activateContinueWorkoutButton(){
+        MenuItem item = menu.getItem(0);
+        item.setVisible(true);
+
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(500);
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+
+        findViewById(R.id.continueInProgressWorkout).startAnimation(anim);
+    }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        if(App.getCurrentWorkout() != null){
+            activateContinueWorkoutButton();
+        }
+    }*/
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode == RESULT_CANCELED){
             if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
-                System.out.println(App.getCurrentWorkout());
-                System.out.println(App.getCurrentWorkoutCurrentPage());
-                MenuItem item = menu.getItem(0);
-                item.setVisible(true);
-
-
-
-                Animation anim = new AlphaAnimation(0.0f, 1.0f);
-                anim.setDuration(500); //You can manage the time of the blink with this parameter
-                anim.setStartOffset(20);
-                anim.setRepeatMode(Animation.REVERSE);
-                anim.setRepeatCount(Animation.INFINITE);
-
-
-                findViewById(R.id.continueInProgressWorkout).startAnimation(anim);
+                activateContinueWorkoutButton();
+            }
+        }else if(resultCode == RESULT_OK){
+            if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
+                System.out.println("User aborted workout, no need to keep the state");
+                menu.getItem(0).setVisible(false);
             }
         }
     }

@@ -127,6 +127,7 @@ public class RestDisplayFragment extends Fragment {
         int width = progressBar.getWidth();
         progressBar.setMax(width);
 
+
         ValueAnimator animator = ValueAnimator.ofInt(width, 0);
         animator.setInterpolator(new LinearInterpolator());
         animator.setStartDelay(0);

@@ -31,6 +31,7 @@ public class WorkoutDetails extends AppCompatActivity {
     private MyWorkoutsWorkoutDetailsAdapter adapter;
     private Workout selectedWorkout;
     private int REQUEST_CODE_EDIT_WORKOUT = 101;
+    private int PLAY_WORKOUT_REQUEST_CODE = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +66,12 @@ public class WorkoutDetails extends AppCompatActivity {
         if(id == R.id.doWorkoutButton){
             Intent intent = new Intent(WorkoutDetails.this,PlayWorkout.class);
             intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
-            startActivity(intent);
+            intent.putExtra("startingPage",0);
+            startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
         }else if(id == R.id.editWorkout){
             Intent intent = new Intent(WorkoutDetails.this,CreateNewWorkout.class);
             intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
-            startActivityForResult(intent,REQUEST_CODE_EDIT_WORKOUT);
+            getParent().startActivityForResult(intent,REQUEST_CODE_EDIT_WORKOUT);
         }else if(id == R.id.deleteWorkout){
             showDeleteConfirmationDialog();
         }

@@ -3,10 +3,12 @@ package com.codecool.nopainnogain;
 
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -58,7 +60,11 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
 
         workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
         componentList = workout.getBlocksForWorkoutDisplay();
-        currentPage = 0;
+        currentPage = getIntent().getIntExtra("startingPage",0);
+
+        App.setCurrentWorkout(workout);
+        App.setCurrentWorkoutCurrentPage(currentPage);
+
 
         adapter = new PlayWorkoutAdapter(componentList,getSupportFragmentManager());
 
@@ -67,12 +73,24 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         final CustomOnPageChangeListener customOnPageChangeListener = new CustomOnPageChangeListener();
         mViewPager.addOnPageChangeListener(customOnPageChangeListener);
 
-        mViewPager.post(new Runnable() {
-            @Override
-            public void run() {
-                customOnPageChangeListener.onPageSelected(0);
-            }
-        });
+        if(currentPage != 0){
+            mViewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setCurrentItem(currentPage,false);
+                }
+            });
+        }else{
+            mViewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    customOnPageChangeListener.onPageSelected(currentPage);
+
+                }
+            });
+        }
+
+
     }
 
     @Override
@@ -82,11 +100,45 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.abortWorkout){
+            abortConfirmationDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void abortConfirmationDialog(){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Abort Workout")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setResult(RESULT_OK);
+                        App.setCurrentWorkout(null);
+                        App.setCurrentWorkoutCurrentPage(-1);
+                        finish();
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setMessage("Are you sure you want to abort this workout?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
     @Override
     public void onFragmentInteraction() {
         mViewPager.setCurrentItem(++currentPage,true);
         if(currentPage == componentList.size()){
+            setResult(RESULT_OK);
             finish();
         }
     }
@@ -95,6 +147,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     public void onTimesUp() {
         mViewPager.setCurrentItem(++currentPage,true);
         if(currentPage == componentList.size()){
+            setResult(RESULT_OK);
             finish();
         }
     }
@@ -111,7 +164,6 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
 
     @Override
     public void onBackPressed() {
-        App.setCurrentWorkout(workout);
         App.setCurrentWorkoutCurrentPage(currentPage);
         setResult(RESULT_CANCELED);
         finish();
