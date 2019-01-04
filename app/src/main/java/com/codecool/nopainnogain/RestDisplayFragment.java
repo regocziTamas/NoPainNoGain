@@ -23,6 +23,7 @@ public class RestDisplayFragment extends Fragment {
 
     private OnRestTimeUpListener mListener;
     private long duration;
+    private float currentTimeLeft;
     private TextView timeLeft;
     private CountDownTimer timer;
     private ProgressBar progressBar;
@@ -100,6 +101,7 @@ public class RestDisplayFragment extends Fragment {
             @Override
             public void onTick(long l) {
                 float currentTime = l/1000F;
+                currentTimeLeft = currentTime;
                 timeLeft.setText(String.format(Locale.ENGLISH,"%.2f",currentTime));
             }
 
@@ -111,6 +113,7 @@ public class RestDisplayFragment extends Fragment {
         };
 
         timer.start();
+
 
     }
 

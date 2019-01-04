@@ -141,7 +141,6 @@ public class CreateNewWorkout extends AppCompatActivity {
 
     @Override
     public void finish() {
-        System.out.println("most mi a fasz van?");
         Intent returnIntent = getIntent();
         workout.setTitle(editText.getText().toString());
         returnIntent.putExtra("newWorkout",Workout.toJsonString(workout));

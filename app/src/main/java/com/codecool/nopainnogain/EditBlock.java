@@ -107,7 +107,7 @@ public class EditBlock extends AppCompatActivity {
                 currentlyEditedWorkoutExercise.setReps(reps);
                 adapter.notifyDataSetChanged();
             }
-
+            textView.setVisibility(View.GONE);
         }
     }
 

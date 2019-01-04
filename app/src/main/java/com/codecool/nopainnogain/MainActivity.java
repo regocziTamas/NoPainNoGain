@@ -93,25 +93,32 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.continueInProgressWorkout).startAnimation(anim);
     }
 
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
         if(App.getCurrentWorkout() != null){
             activateContinueWorkoutButton();
         }
-    }*/
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode == RESULT_CANCELED){
-            if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
+        if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
+            if(resultCode == RESULT_CANCELED){
+                System.out.println("Workout state is saved");
                 activateContinueWorkoutButton();
-            }
-        }else if(resultCode == RESULT_OK){
-            if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
+            }else{
                 System.out.println("User aborted workout, no need to keep the state");
                 menu.getItem(0).setVisible(false);
             }
+        }else if(requestCode == 100){
+            if(resultCode == RESULT_OK ){
+                System.out.println("workout edited or created");
+                Workout newWorkout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
+                dao.saveWorkout(newWorkout);
+
+            }
+
         }
     }
 
