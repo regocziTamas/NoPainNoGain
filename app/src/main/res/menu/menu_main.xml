@@ -2,5 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.codecool.nopainnogain.MainActivity">
-
+    <item
+        android:title="In Progress Workout"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_play_pause"
+        android:id="@+id/continueInProgressWorkout"
+        android:visible="false"
+        />
 </menu>

@@ -1,6 +1,8 @@
 package com.codecool.nopainnogain.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codecool.nopainnogain.App;
 import com.codecool.nopainnogain.MainActivity;
 import com.codecool.nopainnogain.MyWorkouts;
 import com.codecool.nopainnogain.PlayWorkout;
@@ -47,6 +50,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
     public void onBindViewHolder(@NonNull final MyWorkoutsRecyclerViewAdapter.ViewHolder holder, int position) {
         final Workout selectedWorkout = workoutList.get(position);
         holder.workoutTitle.setText(selectedWorkout.getTitle());
+
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,9 +58,40 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
                     Toast.makeText(context,"This workout is empty!",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(holder.imageView.getContext(), PlayWorkout.class);
+
+                final Intent intent = new Intent(holder.imageView.getContext(), PlayWorkout.class);
                 intent.putExtra("workout", Workout.toJsonString(selectedWorkout));
-                ((MainActivity) context).startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
+                intent.putExtra("startingPage",0);
+
+                if(App.getCurrentWorkout() != null){
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Start New Workout")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ((MainActivity) context).startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .setMessage("You have an unfinished workout. By starting a new workout, you will lose your progress in the " +
+                                    "previous one. Do you want to proceed?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }else{
+                    ((MainActivity) context).startActivityForResult(intent,PLAY_WORKOUT_REQUEST_CODE);
+                }
+
+
+
+
+
+
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +102,10 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
                 context.startActivity(intent);
             }
         });
+
+    }
+
+    private void startWorkout(){
 
     }
 

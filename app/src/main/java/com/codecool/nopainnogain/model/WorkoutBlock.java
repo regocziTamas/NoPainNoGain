@@ -27,7 +27,22 @@ public class WorkoutBlock{
             temp.setOrder(getNextOrder());
             rests.add(temp);
         }
+    }
 
+    public void replaceExerciseByOrder(int order, WorkoutExercise newExercise){
+        WorkoutExercise toDelete = null;
+        for(WorkoutExercise ex: exercises){
+            if(ex.getOrder() == order){
+                toDelete = ex;
+            }
+        }
+        if (toDelete != null){
+            System.out.println("replace happening");
+            System.out.println(toDelete);
+            System.out.println(newExercise);
+            exercises.remove(toDelete);
+            exercises.add(order,newExercise);
+        }
 
 
     }

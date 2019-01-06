@@ -35,6 +35,8 @@ public class EditBlock extends AppCompatActivity {
     private Rest currentlyEditedRest;
     private WorkoutExercise currentlyEditedWorkoutExercise;
 
+    private int orderOfCurrentlyEditedExercise;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,11 +105,13 @@ public class EditBlock extends AppCompatActivity {
             }else if(requestCode == REQUEST_CODE_EXERCISE_EDIT){
                 Exercise exercise = Exercise.toExerciseObject(data.getStringExtra("exercise"));
                 int reps = data.getIntExtra("reps",10);
-                currentlyEditedWorkoutExercise.setExercise(exercise);
-                currentlyEditedWorkoutExercise.setReps(reps);
+                /*currentlyEditedWorkoutExercise.setExercise(exercise);
+                currentlyEditedWorkoutExercise.setReps(reps);*/
+                block.replaceExerciseByOrder(orderOfCurrentlyEditedExercise,new WorkoutExercise(reps,exercise));
+                System.out.println("On result edit block: " + block);
                 adapter.notifyDataSetChanged();
             }
-
+            textView.setVisibility(View.GONE);
         }
     }
 
@@ -134,6 +138,8 @@ public class EditBlock extends AppCompatActivity {
         Intent intent = new Intent(this,AddExercise.class);
         intent.putExtra("exercise",Exercise.toJsonString(workoutExercise.getExercise()));
         intent.putExtra("reps",workoutExercise.getReps());
+        System.out.println("On start edit exercise: " + block);
+        orderOfCurrentlyEditedExercise = workoutExercise.getOrder();
         currentlyEditedWorkoutExercise = workoutExercise;
         startActivityForResult(intent,REQUEST_CODE_EXERCISE_EDIT);
     }
@@ -143,6 +149,12 @@ public class EditBlock extends AppCompatActivity {
         intent.putExtra("initialDuration",rest.getDurationInMilis());
         currentlyEditedRest = rest;
         startActivityForResult(intent,REQUEST_CODE_REST_EDIT);
+    }
+
+    public void startAddNewRest(){
+        Intent intent = new Intent(this,AddRest.class);
+        intent.putExtra("initialDuration",1000);
+        startActivityForResult(intent,REQUEST_CODE_REST_CREATE);
     }
 
     public void deleteFromBlock(int order){
@@ -155,12 +167,6 @@ public class EditBlock extends AppCompatActivity {
 
     public void cloneComponentToEnd(WorkoutComponent component){
         block.cloneComponent(component);
-    }
-
-    public void startAddNewRest(){
-        Intent intent = new Intent(this,AddRest.class);
-        intent.putExtra("initialDuration",1000);
-        startActivityForResult(intent,REQUEST_CODE_REST_CREATE);
     }
 
 

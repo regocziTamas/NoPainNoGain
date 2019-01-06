@@ -19,7 +19,16 @@ public class App extends Application {
 
     DataAccess dao;
     private static Workout currentWorkout = null;
-    private static Integer currentWorkoutCurrentPage = null;
+    private static Integer currentWorkoutCurrentPage = -1;
+    private static Long currentRestTimeLeft = -1L;
+
+    public static Long getCurrentRestTimeLeft() {
+        return currentRestTimeLeft;
+    }
+
+    public static void setCurrentRestTimeLeft(Long currentRestTimeLeft) {
+        App.currentRestTimeLeft = currentRestTimeLeft;
+    }
 
     public static Workout getCurrentWorkout() {
         return currentWorkout;
@@ -58,8 +67,30 @@ public class App extends Application {
             dao.saveExercise(e);
         }
 
+        WorkoutExercise wex1 = new WorkoutExercise(10,dao.getAllExercises().get(4));
+        WorkoutExercise wex2 = new WorkoutExercise(10,dao.getAllExercises().get(5));
+        WorkoutExercise wex3 = new WorkoutExercise(10,dao.getAllExercises().get(6));
 
-        WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));
+        Rest rest1 = new Rest(3000);
+        Rest rest2 = new Rest(3000);
+
+        WorkoutBlock wb1 = new WorkoutBlock();
+        wb1.addComponent(wex1);
+        wb1.addComponent(rest1);
+        wb1.addComponent(wex2);
+        wb1.addComponent(rest2);
+        wb1.addComponent(wex3);
+
+        Workout testWorkout = new Workout("Short Test Workout");
+        testWorkout.addBlock(wb1);
+
+        dao.saveWorkout(testWorkout);
+
+
+
+
+
+        /*WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));
         WorkoutExercise wex3 = new WorkoutExercise(10, dao.getAllExercises().get(0));
         WorkoutExercise wex4 = new WorkoutExercise(10, dao.getAllExercises().get(0));
         WorkoutExercise wex5 = new WorkoutExercise(10, dao.getAllExercises().get(0));
@@ -148,7 +179,7 @@ public class App extends Application {
         workout2.addBlock(wb4);
 
         dao.saveWorkout(workout2);
-
+*/
 
 
     }

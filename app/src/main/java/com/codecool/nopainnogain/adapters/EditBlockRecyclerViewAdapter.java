@@ -56,6 +56,7 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
                 @Override
                 public void onClick(View view) {
                     editBlock.startEditExercise(ex);
+                    System.out.println("Starting editing of ex with order: " + ex.getOrder());
                 }
             });
         }else if(comp instanceof Rest){
@@ -92,7 +93,6 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
         int order1 = viewHolder.getAdapterPosition();
         int order2 = target.getAdapterPosition();
 
-        System.out.println("From: " + order1 + " To: " + order2);
 
         Collections.swap(components,order1,order2);
         notifyItemMoved(order1,order2);

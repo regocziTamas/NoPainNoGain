@@ -38,6 +38,8 @@ public class AddExercise extends AppCompatActivity {
         Exercise exercise = Exercise.toExerciseObject(intent.getStringExtra("exercise"));
         int reps = intent.getIntExtra("reps",10);
 
+        /*System.out.println("On arrival: " + exercise + " Reps: " + reps);*/
+
         if(exercise == null){
             Exercise defaultExercise = dao.getExerciseByName("Push-up");
             selectedExercise = defaultExercise;
@@ -48,9 +50,6 @@ public class AddExercise extends AppCompatActivity {
             exerciseName.setText(exercise.getName());
             repsEditText.setText(String.valueOf(reps));
         }
-
-
-
 
 
         selectNewExercise.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +66,7 @@ public class AddExercise extends AppCompatActivity {
                 Intent intent = getIntent();
                 intent.putExtra("exercise",Exercise.toJsonString(selectedExercise));
                 intent.putExtra("reps",Integer.valueOf(repsEditText.getText().toString()));
+                /*System.out.println("On departure: " + selectedExercise + " Reps: " + repsEditText.getText().toString());*/
                 setResult(RESULT_OK,intent);
                 finish();
             }

@@ -63,7 +63,7 @@ public class MyWorkouts extends Fragment {
                 Intent intent = new Intent(getContext(),CreateNewWorkout.class);
                 Workout newWorkout = new Workout("New Workout");
                 intent.putExtra("workout",Workout.toJsonString(newWorkout));
-                startActivityForResult(intent,REQUEST_CODE_NEW_WORKOUT);
+                ((MainActivity)getActivity()).startActivityForResult(intent,REQUEST_CODE_NEW_WORKOUT);
             }
         });
     }
@@ -74,22 +74,24 @@ public class MyWorkouts extends Fragment {
         return inflater.inflate(R.layout.fragment_my_workouts, container, false);
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == -1){
             if(requestCode == REQUEST_CODE_NEW_WORKOUT){
                 Workout newWorkout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
+
                 dao.saveWorkout(newWorkout);
                 adapter.addToDataSet(newWorkout);
                 adapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
 
 
     @Override
     public void onResume() {
         super.onResume();
+
         adapter.updateDataSet(dao.getAllWorkouts());
 
     }
