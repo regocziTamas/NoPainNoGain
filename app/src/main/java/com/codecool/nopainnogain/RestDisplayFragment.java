@@ -60,7 +60,6 @@ public class RestDisplayFragment extends Fragment {
 
         nextExerciseTextView = view.findViewById(R.id.nextExercise);
         WorkoutComponent component = mListener.getNextExercise();
-        System.out.println("next exercise: " + component);
         if(component instanceof WorkoutExercise){
             WorkoutExercise ex = (WorkoutExercise) component;
             nextExerciseTextView.setText("Coming up next:\n"+ ex.getReps() + " repetitions of " + ex.getExercise());
@@ -95,7 +94,6 @@ public class RestDisplayFragment extends Fragment {
 
     public void continueRest(long timeLeft){
         float perc = (float) timeLeft/(float) duration;
-        System.out.println("timeleft " + timeLeft + " duration: " + duration + " perc: " + perc);
         duration = timeLeft;
         handleCountdown(perc);
 

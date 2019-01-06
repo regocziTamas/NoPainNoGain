@@ -104,7 +104,6 @@ public class MyWorkoutsWorkoutDetailsAdapter extends RecyclerView.Adapter<MyWork
     private void showMenu(View v, WorkoutBlock block) {
         popup = new PopupMenu(context, v);
         final int blockOrder = block.getOrder();
-        System.out.println("Clicked block number: " + blockOrder);
         popup.setOnMenuItemClickListener(null);
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

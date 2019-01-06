@@ -167,7 +167,6 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         int index = currentPage+1;
         for(int i = index; i < componentList.size(); i++){
             if(componentList.get(i) instanceof WorkoutExercise){
-                System.out.println(componentList.get(i));
                 return componentList.get(i);
             }
         }
@@ -178,9 +177,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     public void onBackPressed() {
         App.setCurrentWorkoutCurrentPage(originalPageNumbering);
         if(adapter.getItem(currentPage) instanceof RestDisplayFragment){
-            System.out.println("Its a rest!");
             RestDisplayFragment currentRest = (RestDisplayFragment) adapter.getItem(currentPage);
-
             App.setCurrentRestTimeLeft(currentRest.getCurrentTimeLeft());
         }
         setResult(RESULT_CANCELED);

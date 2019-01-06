@@ -105,10 +105,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == PLAY_WORKOUT_REQUEST_CODE){
             if(resultCode == RESULT_CANCELED){
-                System.out.println("Workout state is saved");
                 activateContinueWorkoutButton();
             }else{
-                System.out.println("User aborted workout, no need to keep the state");
                 App.setCurrentRestTimeLeft(-1L);
                 App.setCurrentWorkout(null);
                 App.setCurrentWorkoutCurrentPage(-1);
@@ -116,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }else if(requestCode == 100){
             if(resultCode == RESULT_OK ){
-                System.out.println("workout edited or created");
                 Workout newWorkout = Workout.toWorkoutObject(data.getStringExtra("newWorkout"));
                 dao.saveWorkout(newWorkout);
 
