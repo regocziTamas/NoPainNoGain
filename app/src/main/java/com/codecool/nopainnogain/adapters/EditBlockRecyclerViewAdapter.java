@@ -56,7 +56,7 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
                 @Override
                 public void onClick(View view) {
                     editBlock.startEditExercise(ex);
-                    System.out.println("Starting editing of ex with order: " + ex.getOrder());
+                    /*System.out.println("Starting editing of ex with order: " + ex.getOrder());*/
                 }
             });
         }else if(comp instanceof Rest){
@@ -127,15 +127,9 @@ public class EditBlockRecyclerViewAdapter extends RecyclerView.Adapter<EditBlock
         private GestureDetector gestureDetector = new GestureDetector(context,new GestureDetector.SimpleOnGestureListener(){
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                if(component instanceof WorkoutExercise){
-                    WorkoutExercise ex = (WorkoutExercise) component;
-                    components.add(new WorkoutExercise(ex.getReps(),ex.getExercise()));
-                }else if(component instanceof Rest){
-                    Rest rest = (Rest) component;
-                    components.add(new Rest(rest.getDurationInMilis()));
-                }
-                notifyItemInserted(components.size()-1);
+                notifyItemInserted(components.size());
                 ((EditBlock)context).cloneComponentToEnd(component);
+                System.out.println("Engem most meghívtak");
 
                 return super.onDoubleTap(e);
             }

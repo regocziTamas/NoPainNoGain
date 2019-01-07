@@ -1,6 +1,7 @@
 package com.codecool.nopainnogain;
 
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -23,6 +24,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.LinearInterpolator;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,17 +43,20 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
-public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFragment.OnFragmentInteractionListener, RestDisplayFragment.OnRestTimeUpListener {
+public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFragment.OnExerciseDoneListener, RestDisplayFragment.OnRestTimeUpListener {
 
 
     private NonSwipeableViewPager mViewPager;
     private PlayWorkoutAdapter adapter;
     private int currentPage;
     private int originalPageNumbering;
+    private int originalWorkoutComponentCount;
     private CustomOnPageChangeListener customOnPageChangeListener;
     private List<WorkoutComponent> componentList;
     private Workout workout;
     private boolean continued;
+    private ProgressBar overallProgress;
+    private TextView numericProgressDisplay;
 
     public PlayWorkout(){
 
@@ -62,6 +68,12 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         setContentView(R.layout.activity_play_workout);
 
         workout = Workout.toWorkoutObject(getIntent().getStringExtra("workout"));
+        originalWorkoutComponentCount = workout.getBlocksForWorkoutDisplay().size();
+
+        overallProgress = findViewById(R.id.workoutProgressBar);
+        numericProgressDisplay = findViewById(R.id.numericProgress);
+
+        numericProgressDisplay.setText("0/"+String.valueOf(originalWorkoutComponentCount));
 
         currentPage = getIntent().getIntExtra("startingPage",0);
         originalPageNumbering = currentPage;
@@ -143,12 +155,13 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     }
 
     @Override
-    public void onFragmentInteraction() {
+    public void onExerciseDone() {
         mViewPager.setCurrentItem(++currentPage,true);
         originalPageNumbering++;
+        numericProgressDisplay.setText(getNumericProgressString());
+        setOverallProgressBar();
         if(currentPage == componentList.size()){
-            setResult(RESULT_OK);
-            finish();
+            finishActivityWithDelay(500);
         }
     }
 
@@ -156,10 +169,53 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
     public void onTimesUp() {
         mViewPager.setCurrentItem(++currentPage,true);
         originalPageNumbering++;
+        numericProgressDisplay.setText(getNumericProgressString());
+        setOverallProgressBar();
         if(currentPage == componentList.size()){
-            setResult(RESULT_OK);
-            finish();
+            finishActivityWithDelay(500);
         }
+    }
+
+    private void finishActivityWithDelay(long delay){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setResult(RESULT_OK);
+                finish();
+            }
+        },delay);
+    }
+
+    private String getNumericProgressString(){
+        return String.valueOf(originalPageNumbering) + "/" + String.valueOf(originalWorkoutComponentCount);
+    }
+
+    private void setOverallProgressBar(){
+        double percentage = (double) originalPageNumbering /(double) originalWorkoutComponentCount;
+        double maxWidth = overallProgress.getWidth();
+        double currentWidth = maxWidth * percentage;
+        System.out.println(percentage);
+        percentage = percentage * 100D;
+
+
+        ValueAnimator animator = ValueAnimator.ofInt(overallProgress.getProgress(),(int)percentage);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setStartDelay(0);
+        animator.setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int value = (int) valueAnimator.getAnimatedValue();
+                overallProgress.setProgress(value);
+            }
+        });
+
+        animator.start();
+
+
+
+
     }
 
     @Override

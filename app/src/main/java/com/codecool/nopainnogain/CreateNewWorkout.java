@@ -56,6 +56,8 @@ public class CreateNewWorkout extends AppCompatActivity {
         adapter.newDataset(workout.getBlocksForListing());
         recyclerView.requestFocus();
 
+        System.out.println(workout);
+
         editText.setText(workout.getTitle());
 
         if(workout.getBlocksForListing().size() == 0){

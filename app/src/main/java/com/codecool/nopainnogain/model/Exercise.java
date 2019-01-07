@@ -27,6 +27,8 @@ public class Exercise{
         this.target = target;
     }
 
+    public Exercise(){}
+
     public String getName() {
         return name;
     }
@@ -61,7 +63,7 @@ public class Exercise{
 
     @Override
     public String toString() {
-        return "ID: "+ id + " "+ name;
+        return name;
     }
 
     public static String toJsonString(Exercise exercise){
