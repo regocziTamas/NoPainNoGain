@@ -18,10 +18,8 @@ import android.widget.TextView;
 import com.codecool.nopainnogain.adapters.MyWorkoutsWorkoutDetailsAdapter;
 import com.codecool.nopainnogain.dataaccess.DataAccess;
 import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
-import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
 import com.codecool.nopainnogain.model.Workout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 public class WorkoutDetails extends AppCompatActivity {
 

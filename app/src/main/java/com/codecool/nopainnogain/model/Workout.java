@@ -2,16 +2,13 @@ package com.codecool.nopainnogain.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import java.io.IOException;
 import java.util.ArrayList;

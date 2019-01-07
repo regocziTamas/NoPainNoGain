@@ -9,7 +9,6 @@ import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
-import com.google.gson.Gson;
 
 
 import java.util.Arrays;

@@ -30,16 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codecool.nopainnogain.adapters.PlayWorkoutAdapter;
-import com.codecool.nopainnogain.dataaccess.DataAccess;
-import com.codecool.nopainnogain.dataaccess.InMemoryDataAccess;
-import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.Workout;
-import com.codecool.nopainnogain.model.WorkoutBlockStart;
 import com.codecool.nopainnogain.model.WorkoutComponent;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.util.NonSwipeableViewPager;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import java.util.List;
 

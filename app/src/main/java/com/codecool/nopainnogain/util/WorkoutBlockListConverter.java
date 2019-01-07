@@ -2,34 +2,41 @@ package com.codecool.nopainnogain.util;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.WorkoutBlock;
-import com.codecool.nopainnogain.model.WorkoutComponent;
-import com.codecool.nopainnogain.model.WorkoutExercise;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutBlockListConverter {
+
+    private ObjectMapper objectMapper = new ObjectMapper().enableDefaultTyping();
+
     @TypeConverter
     public String fromBlockToString(List<WorkoutBlock> blocks){
-        RuntimeTypeAdapterFactory<WorkoutComponent> adapter = RuntimeTypeAdapterFactory
-                .of(WorkoutComponent.class)
-                .registerSubtype(WorkoutExercise.class)
-                .registerSubtype(Rest.class);
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapter).create();
-        return gson.toJson(blocks);
+        String jsonString = null;
+        try {
+            jsonString = objectMapper.writerFor(new TypeReference<List<WorkoutBlock>>() { }).writeValueAsString(blocks);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 
     @TypeConverter
     public List<WorkoutBlock> fromStringToWorkoutBlockList(String string){
-        RuntimeTypeAdapterFactory<WorkoutComponent> adapter = RuntimeTypeAdapterFactory
-                .of(WorkoutComponent.class)
-                .registerSubtype(WorkoutExercise.class)
-                .registerSubtype(Rest.class);
-        Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapter).create();
-        return gson.fromJson(string, new TypeToken<List<WorkoutBlock>>(){}.getType());
+        List<WorkoutBlock> result = new ArrayList<>();
+
+        try {
+            List<WorkoutBlock> blocks = objectMapper.readValue(string,new TypeReference<List<WorkoutBlock>>() { });
+            result.addAll(blocks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
