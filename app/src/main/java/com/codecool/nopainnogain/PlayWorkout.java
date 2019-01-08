@@ -75,6 +75,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
             continued = false;
         }else{
             continued = true;
+            setOverallProgressBar(false);
         }
         componentList = workout.getBlocksForWorkoutDisplay().subList(currentPage,workout.getBlocksForWorkoutDisplay().size());
         currentPage = 0;
@@ -153,7 +154,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         mViewPager.setCurrentItem(++currentPage,true);
         originalPageNumbering++;
         numericProgressDisplay.setText(getNumericProgressString());
-        setOverallProgressBar();
+        setOverallProgressBar(true);
         if(currentPage == componentList.size()){
             finishActivityWithDelay(500);
         }
@@ -164,7 +165,7 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         mViewPager.setCurrentItem(++currentPage,true);
         originalPageNumbering++;
         numericProgressDisplay.setText(getNumericProgressString());
-        setOverallProgressBar();
+        setOverallProgressBar(true);
         if(currentPage == componentList.size()){
             finishActivityWithDelay(500);
         }
@@ -185,27 +186,27 @@ public class PlayWorkout extends AppCompatActivity implements WorkoutDisplayFrag
         return String.valueOf(originalPageNumbering) + "/" + String.valueOf(originalWorkoutComponentCount);
     }
 
-    private void setOverallProgressBar(){
+    private void setOverallProgressBar(boolean animated){
         double percentage = (double) originalPageNumbering /(double) originalWorkoutComponentCount;
-        double maxWidth = overallProgress.getWidth();
-        double currentWidth = maxWidth * percentage;
-        System.out.println(percentage);
         percentage = percentage * 100D;
 
+        if(animated){
+            ValueAnimator animator = ValueAnimator.ofInt(overallProgress.getProgress(),(int)percentage);
+            animator.setInterpolator(new LinearInterpolator());
+            animator.setStartDelay(0);
+            animator.setDuration(200);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int value = (int) valueAnimator.getAnimatedValue();
+                    overallProgress.setProgress(value);
+                }
+            });
 
-        ValueAnimator animator = ValueAnimator.ofInt(overallProgress.getProgress(),(int)percentage);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setStartDelay(0);
-        animator.setDuration(200);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int value = (int) valueAnimator.getAnimatedValue();
-                overallProgress.setProgress(value);
-            }
-        });
-
-        animator.start();
+            animator.start();
+        }else{
+            overallProgress.setProgress((int)percentage);
+        }
 
 
 

@@ -111,7 +111,7 @@ public class App extends Application {
 
                 }else {
                     for(Workout workout: updatedWorkouts){
-
+                        dao.saveSyncedWorkout(workout);
                     }
                 }
             }

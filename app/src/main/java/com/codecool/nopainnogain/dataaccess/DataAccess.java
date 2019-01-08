@@ -27,4 +27,6 @@ public interface DataAccess {
 
     public Workout findSyncedWorkoutById(long id);
 
+    public void saveSyncedWorkout(Workout workout);
+
 }

@@ -56,10 +56,12 @@ public class DatabaseDataAccess implements DataAccess {
         return workoutDao.getWorkoutById(id);
     }
 
+    @Override
     public List<Workout> getAllSyncedWorkouts() {
         return syncedWorkoutDao.getAllWorkouts();
     }
 
+    @Override
     public Workout findSyncedWorkoutById(long id) {
         return syncedWorkoutDao.getWorkoutById(id);
     }
@@ -77,6 +79,7 @@ public class DatabaseDataAccess implements DataAccess {
         }
     }
 
+    @Override
     public void saveSyncedWorkout(Workout workout){
         long id = syncedWorkoutDao.insertWorkout(workout);
         if(id == -1){

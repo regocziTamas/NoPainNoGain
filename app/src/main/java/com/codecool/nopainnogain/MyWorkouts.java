@@ -51,7 +51,7 @@ public class MyWorkouts extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         dao = DatabaseDataAccess.getInstance();
-        adapter = new MyWorkoutsRecyclerViewAdapter(dao.getAllWorkouts(),getContext());
+        adapter = new MyWorkoutsRecyclerViewAdapter(dao.getAllWorkouts(),getContext(),true);
         recyclerView = view.findViewById(R.id.myWorkoutsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);

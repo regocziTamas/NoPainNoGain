@@ -30,6 +30,7 @@ public class WorkoutDetails extends AppCompatActivity {
     private Workout selectedWorkout;
     private int REQUEST_CODE_EDIT_WORKOUT = 101;
     private int PLAY_WORKOUT_REQUEST_CODE = 1234;
+    private boolean allowEditAndDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class WorkoutDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         selectedWorkout = Workout.toWorkoutObject(intent.getStringExtra("workout"));
+        allowEditAndDelete = intent.getBooleanExtra("allowEditAndDelete", true);
 
         System.out.println(selectedWorkout);
 
@@ -56,7 +58,12 @@ public class WorkoutDetails extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.do_workout_menu,menu);
+        if(allowEditAndDelete){
+            getMenuInflater().inflate(R.menu.do_workout_menu,menu);
+        }else{
+            getMenuInflater().inflate(R.menu.do_workout_menu_edit_delete_disabled,menu);
+        }
+
         return true;
     }
 

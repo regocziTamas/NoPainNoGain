@@ -47,15 +47,9 @@ public class WorkoutStore extends Fragment {
         dao = DatabaseDataAccess.getInstance();
         recyclerView = view.findViewById(R.id.workoutStoreRecyclerView);
 
-
         List<Workout> workoutList = dao.getAllSyncedWorkouts();
-        if(workoutList.isEmpty()){
-            Snackbar snackbar = Snackbar.make(view,"No workouts found in the synced database",Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        }
 
-
-        adapter = new MyWorkoutsRecyclerViewAdapter(workoutList,getContext());
+        adapter = new MyWorkoutsRecyclerViewAdapter(workoutList,getContext(),false);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
@@ -67,6 +61,8 @@ public class WorkoutStore extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_workout_store, container, false);
     }
+
+
 
 
 

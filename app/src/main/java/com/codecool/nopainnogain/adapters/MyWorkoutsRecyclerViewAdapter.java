@@ -30,10 +30,12 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
 
     private List<Workout> workoutList;
     private Context context;
+    private boolean allowEditAndDelete;
 
-    public MyWorkoutsRecyclerViewAdapter(List<Workout> workoutList, Context context){
+    public MyWorkoutsRecyclerViewAdapter(List<Workout> workoutList, Context context, boolean allowEditAndDelete){
         this.workoutList = workoutList;
         this.context = context;
+        this.allowEditAndDelete = allowEditAndDelete;
     }
 
     @NonNull
@@ -97,6 +99,7 @@ public class MyWorkoutsRecyclerViewAdapter extends RecyclerView.Adapter<MyWorkou
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), WorkoutDetails.class);
                 intent.putExtra("workout",Workout.toJsonString(selectedWorkout));
+                intent.putExtra("allowEditAndDelete",allowEditAndDelete);
                 context.startActivity(intent);
             }
         });
