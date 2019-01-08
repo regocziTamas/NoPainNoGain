@@ -23,4 +23,8 @@ public interface DataAccess {
 
     public Exercise getExerciseByName(String name);
 
+    public List<Workout> getAllSyncedWorkouts();
+
+    public Workout findSyncedWorkoutById(long id);
+
 }

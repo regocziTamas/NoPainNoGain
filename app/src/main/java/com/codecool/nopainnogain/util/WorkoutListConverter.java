@@ -1,6 +1,5 @@
 package com.codecool.nopainnogain.util;
 
-import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.Workout;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
