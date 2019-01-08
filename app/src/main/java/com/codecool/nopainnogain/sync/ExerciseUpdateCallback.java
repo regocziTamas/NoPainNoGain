@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ExerciseUpdateCallback {
 
-    public void onExerciseUpdate(List<Exercise> updatedData);
+    public void onExerciseUpdate(String result);
 
 
 }

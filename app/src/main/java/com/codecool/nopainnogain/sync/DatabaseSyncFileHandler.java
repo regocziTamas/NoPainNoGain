@@ -48,7 +48,7 @@ public class DatabaseSyncFileHandler {
         return Long.valueOf(timestamp);
     }
 
-    private void updateLastUpdatedTimestamp(Long timestamp){
+    public void updateLastUpdatedTimestamp(Long timestamp){
         File file = getUpdateFile();
         try {
             FileOutputStream writer = new FileOutputStream(file,false);
@@ -60,11 +60,12 @@ public class DatabaseSyncFileHandler {
         }
     }
 
-    private Long getLastUpdateTimestamp(){
+    public Long getLastUpdateTimestamp(){
         if(!checkLastUpdatedAvailable()){
             return 1500L;
         }else{
-            return readLastUpdatedTimestamp();
+            /*return readLastUpdatedTimestamp();*/
+            return 1500L;
         }
     }
 

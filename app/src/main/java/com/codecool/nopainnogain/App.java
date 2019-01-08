@@ -1,6 +1,9 @@
 package com.codecool.nopainnogain;
 
 import android.app.Application;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+
 import com.codecool.nopainnogain.dataaccess.DataAccess;
 import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.model.Exercise;
@@ -9,14 +12,19 @@ import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
+import com.codecool.nopainnogain.sync.DatabaseSyncer;
+import com.codecool.nopainnogain.sync.ExerciseUpdateCallback;
+import com.codecool.nopainnogain.util.ExerciseListConverter;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 
 public class App extends Application {
 
     DataAccess dao;
+    DatabaseSyncer syncer;
     private static Workout currentWorkout = null;
     private static Integer currentWorkoutCurrentPage = -1;
     private static Long currentRestTimeLeft = -1L;
@@ -48,7 +56,41 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Exercise ex1 = new Exercise("Push-up", "You do some push-ups, it is easy", ExerciseTarget.Chest);
+
+        DatabaseDataAccess.initializeDataAccess(getApplicationContext());
+        dao = DatabaseDataAccess.getInstance();
+
+        /*Update database*/
+        syncer = new DatabaseSyncer(this);
+
+
+        syncer.updateExercises(new ExerciseUpdateCallback() {
+            @Override
+            public void onExerciseUpdate(String result) {
+                System.out.println(result);
+                List<Exercise> updatedExercises = ExerciseListConverter.convertStringToExerciseList(result);
+                if(updatedExercises.isEmpty()){
+
+                }else{
+                    for(Exercise exercise: updatedExercises){
+                        dao.saveExercise(exercise);
+                    }
+                }
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+       /* Exercise ex1 = new Exercise("Push-up", "You do some push-ups, it is easy", ExerciseTarget.Chest);
         Exercise ex2 = new Exercise("Barbell Curl", "Stand up with your torso upright while holding a barbell at a shoulder-width grip. The palm of your hands should be facing forward and the elbows should be close to the torso. This will be your starting position.", ExerciseTarget.Biceps);
         Exercise ex3 = new Exercise("Bench Dip", "For this exercise you will need to place a bench behind your back. With the bench perpendicular to your body, and while looking away from it, hold on to the bench on its edge with the hands fully extended, separated at shoulder width. The legs will be extended forward, bent at the waist and perpendicular to your torso. This will be your starting position.", ExerciseTarget.Triceps);
         Exercise ex4 = new Exercise("Regular Grip Front Lat Pulldown", "Sit down on a pull-down machine with a wide bar attached to the top pulley. Make sure that you adjust the knee pad of the machine to fit your height. These pads will prevent your body from being raised by the resistance attached to the bar.", ExerciseTarget.Back);
@@ -87,7 +129,7 @@ public class App extends Application {
         testWorkout02.setId(2L);
 
         dao.saveWorkout(testWorkout);
-        dao.saveWorkout(testWorkout02);
+        dao.saveWorkout(testWorkout02);*/
 
 
         /*WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));
@@ -181,7 +223,7 @@ public class App extends Application {
         dao.saveWorkout(workout2);
 */
 
-        System.out.println(dao.getAllWorkouts());
+
 
 
     }
