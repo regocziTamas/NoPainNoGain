@@ -3,61 +3,39 @@ package com.codecool.nopainnogain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkoutBlock{
 
-
-    private List<WorkoutExercise> exercises = new ArrayList<>();
-    private List<Rest> rests = new ArrayList<>();
+    private List<WorkoutComponent> components = new ArrayList<>();
     private int order;
+    private static ObjectMapper objectMapper = new ObjectMapper().enableDefaultTyping();
+
+    public WorkoutBlock(){
+
+    }
 
     public void addComponent(WorkoutComponent component){
-        if(component instanceof WorkoutExercise){
-            WorkoutExercise temp = (WorkoutExercise) component;
-            temp.setOrder(getNextOrder());
-            exercises.add(temp);
-        } else if( component instanceof Rest){
-            Rest temp = (Rest) component;
-            temp.setOrder(getNextOrder());
-            rests.add(temp);
-        }
+        component.setOrder(components.size());
+        components.add(component);
     }
 
-    public void replaceExerciseByOrder(int order, WorkoutExercise newExercise){
-        WorkoutExercise toDelete = null;
-        for(WorkoutExercise ex: exercises){
-            if(ex.getOrder() == order){
-                toDelete = ex;
-            }
-        }
-        if (toDelete != null){
-            System.out.println("replace happening");
-            System.out.println(toDelete);
-            System.out.println(newExercise);
-            exercises.remove(toDelete);
-            exercises.add(order,newExercise);
-        }
 
-
-    }
 
     public List<WorkoutComponent> getComponents(){
-        List<WorkoutComponent> temp = new ArrayList<>();
-        temp.addAll(exercises);
-        temp.addAll(rests);
-        Collections.sort(temp,new WorkoutComponentComparator());
-        return temp;
+        Collections.sort(components,new WorkoutComponentComparator());
+        return components;
     }
 
-    private int getNextOrder(){
-        return exercises.size() + rests.size();
-    }
 
     @Override
     public String toString() {
@@ -78,21 +56,29 @@ public class WorkoutBlock{
     }
 
     public static String toJsonString(WorkoutBlock block){
-        return new Gson().toJson(block);
+        String string = null;
+        try {
+            string = objectMapper.writeValueAsString(block);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return string;
     }
 
     public static WorkoutBlock toWorkoutBlockObject(String string){
-        return new Gson().fromJson(string,new TypeToken<WorkoutBlock>(){}.getType());
+        WorkoutBlock block = null;
+        try {
+            block = objectMapper.readValue(string,WorkoutBlock.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return block;
     }
 
     public void reorderComponents(){
         for(int i = 0; i < getComponents().size(); i++){
             WorkoutComponent component = getComponents().get(i);
-            if(component instanceof WorkoutExercise){
-                ((WorkoutExercise) component).setOrder(i);
-            }else if(component instanceof Rest){
-                ((Rest) component).setOrder(i);
-            }
+            component.setOrder(i);
         }
     }
 
@@ -108,60 +94,29 @@ public class WorkoutBlock{
 
     public void swapTwoComponents(int order1, int order2){
         for(WorkoutComponent component: getComponents()){
-            if(component instanceof  WorkoutExercise){
-                WorkoutExercise ex = (WorkoutExercise) component;
-                if(ex.getOrder() == order1){
-                    ex.setOrder(order2);
-                }else if(ex.getOrder() == order2){
-                    ex.setOrder(order1);
-                }
-            }
-            else if(component instanceof Rest){
-                Rest rest = (Rest) component;
-                if(rest.getOrder() == order1){
-                    rest.setOrder(order2);
-                }else if(rest.getOrder() == order2){
-                    rest.setOrder(order1);
-                }
+            if(component.getOrder() == order1){
+                component.setOrder(order2);
+            }else if(component.getOrder() == order2){
+                component.setOrder(order1);
             }
         }
     }
 
     public void deleteComponentByOrder(int i){
-        for(WorkoutExercise ex: exercises){
-            if(ex.getOrder() == i){
-                exercises.remove(ex);
+        for(WorkoutComponent component: components){
+            if(component.getOrder() == i){
+                components.remove(component);
                 reorderComponents();
-                return;
             }
         }
 
-        for(Rest rest: rests){
-            if(rest.getOrder() == i){
-                rests.remove(rest);
-                reorderComponents();
-                return;
-            }
-        }
     }
 
     class WorkoutComponentComparator implements java.util.Comparator<WorkoutComponent>{
 
         @Override
         public int compare(WorkoutComponent t1, WorkoutComponent t2) {
-            int t1Order;
-            if(t1 instanceof WorkoutExercise){
-                t1Order = ((WorkoutExercise) t1).getOrder();
-            } else{
-                t1Order = ((Rest) t1).getOrder();
-            }
-            int t2Order;
-            if(t2 instanceof WorkoutExercise){
-                t2Order = ((WorkoutExercise) t2).getOrder();
-            } else{
-                t2Order = ((Rest) t2).getOrder();
-            }
-            return t1Order - t2Order;
+            return t1.getOrder() - t2.getOrder();
         }
     }
 }

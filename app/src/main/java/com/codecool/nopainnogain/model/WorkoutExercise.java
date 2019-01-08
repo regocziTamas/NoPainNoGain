@@ -3,7 +3,9 @@ package com.codecool.nopainnogain.model;
 import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import com.fasterxml.jackson.*;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 
 
@@ -11,13 +13,15 @@ public class WorkoutExercise extends WorkoutComponent{
 
     int reps;
     Exercise exercise;
-    int order;
+
 
 
     public WorkoutExercise(int reps, Exercise exercise) {
         this.reps = reps;
         this.exercise = exercise;
     }
+
+    public WorkoutExercise(){}
 
     public int getReps() {
         return reps;
@@ -32,13 +36,7 @@ public class WorkoutExercise extends WorkoutComponent{
         return reps + " x " + exercise.getName();
     }
 
-    public int getOrder() {
-        return order;
-    }
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
 
     public void setReps(int reps) {
         this.reps = reps;

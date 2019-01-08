@@ -12,16 +12,21 @@ public class DatabaseDataAccess implements DataAccess {
 
     private WorkoutDao workoutDao;
     private ExerciseDao exerciseDao;
+    private WorkoutDao syncedWorkoutDao;
     private WorkoutDatabase database;
+    private WorkoutDatabase syncedDatabase;
     private static DatabaseDataAccess instance = null;
 
     private DatabaseDataAccess(Context applicationContext){
         database = Room.databaseBuilder(applicationContext ,WorkoutDatabase.class,"nopainnogain").allowMainThreadQueries().build();
-        exerciseDao = database.exerciseDao();
+        syncedDatabase = Room.databaseBuilder(applicationContext,WorkoutDatabase.class,"nopainnogainsync").allowMainThreadQueries().build();
+        exerciseDao = syncedDatabase.exerciseDao();
+        syncedWorkoutDao = syncedDatabase.workoutDao();
         workoutDao = database.workoutDao();
 
         workoutDao.deleteAllWorkouts();
         exerciseDao.deleteAllExercises();
+        syncedWorkoutDao.deleteAllWorkouts();
     }
 
     public static void initializeDataAccess(Context applicationContext){

@@ -9,7 +9,6 @@ import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
-import com.google.gson.Gson;
 
 
 import java.util.Arrays;
@@ -84,10 +83,11 @@ public class App extends Application {
         Workout testWorkout = new Workout("Short Test Workout");
         testWorkout.addBlock(wb1);
 
+        Workout testWorkout02 = new Workout("Custom IDd Workout");
+        testWorkout02.setId(2L);
+
         dao.saveWorkout(testWorkout);
-
-
-
+        dao.saveWorkout(testWorkout02);
 
 
         /*WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));
@@ -180,6 +180,8 @@ public class App extends Application {
 
         dao.saveWorkout(workout2);
 */
+
+        System.out.println(dao.getAllWorkouts());
 
 
     }

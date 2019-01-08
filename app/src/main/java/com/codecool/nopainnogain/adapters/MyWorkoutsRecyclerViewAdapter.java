@@ -17,12 +17,10 @@ import android.widget.Toast;
 
 import com.codecool.nopainnogain.App;
 import com.codecool.nopainnogain.MainActivity;
-import com.codecool.nopainnogain.MyWorkouts;
 import com.codecool.nopainnogain.PlayWorkout;
 import com.codecool.nopainnogain.R;
 import com.codecool.nopainnogain.WorkoutDetails;
 import com.codecool.nopainnogain.model.Workout;
-import com.google.gson.Gson;
 
 import java.util.List;
 

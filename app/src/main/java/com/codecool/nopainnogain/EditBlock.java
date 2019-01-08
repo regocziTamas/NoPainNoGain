@@ -89,7 +89,6 @@ public class EditBlock extends AppCompatActivity {
                 Rest newRest = new Rest(newDuration);
                 block.addComponent(newRest);
                 adapter.notifyDataSetChanged();
-                adapter.addComponentManually(newRest);
                 textView.setVisibility(View.GONE);
             }else if(requestCode == REQUEST_CODE_REST_EDIT){
                 int newDuration = data.getIntExtra("newDuration",1000);
@@ -101,14 +100,11 @@ public class EditBlock extends AppCompatActivity {
                 WorkoutExercise workoutExercise = new WorkoutExercise(reps,exercise);
                 block.addComponent(workoutExercise);
                 adapter.notifyDataSetChanged();
-                adapter.addComponentManually(workoutExercise);
             }else if(requestCode == REQUEST_CODE_EXERCISE_EDIT){
                 Exercise exercise = Exercise.toExerciseObject(data.getStringExtra("exercise"));
                 int reps = data.getIntExtra("reps",10);
-                /*currentlyEditedWorkoutExercise.setExercise(exercise);
-                currentlyEditedWorkoutExercise.setReps(reps);*/
-                block.replaceExerciseByOrder(orderOfCurrentlyEditedExercise,new WorkoutExercise(reps,exercise));
-                System.out.println("On result edit block: " + block);
+                currentlyEditedWorkoutExercise.setExercise(exercise);
+                currentlyEditedWorkoutExercise.setReps(reps);
                 adapter.notifyDataSetChanged();
             }
             textView.setVisibility(View.GONE);
@@ -138,7 +134,7 @@ public class EditBlock extends AppCompatActivity {
         Intent intent = new Intent(this,AddExercise.class);
         intent.putExtra("exercise",Exercise.toJsonString(workoutExercise.getExercise()));
         intent.putExtra("reps",workoutExercise.getReps());
-        System.out.println("On start edit exercise: " + block);
+        /*System.out.println("On start edit exercise: " + block);*/
         orderOfCurrentlyEditedExercise = workoutExercise.getOrder();
         currentlyEditedWorkoutExercise = workoutExercise;
         startActivityForResult(intent,REQUEST_CODE_EXERCISE_EDIT);

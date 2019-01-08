@@ -2,19 +2,22 @@ package com.codecool.nopainnogain.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 @Entity(tableName = "workout")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Workout{
 
 
@@ -22,11 +25,14 @@ public class Workout{
     private List<WorkoutBlock> blocks = new ArrayList<>();
     @PrimaryKey(autoGenerate = true)
     private Long id;
-
+    private static ObjectMapper objectMapper = new ObjectMapper().enableDefaultTyping();
 
     public Workout(String title) {
-
         this.title = title;
+    }
+
+    public Workout(){
+
     }
 
     public void setTitle(String title) {
@@ -38,20 +44,17 @@ public class Workout{
         blocks.add(block);
     }
 
+    @JsonIgnore
     public List<WorkoutBlock> getBlocksForListing(){
         Collections.sort(blocks, new WorkoutBlockComparator());
         return blocks;
     }
 
+    @JsonIgnore
     public List<WorkoutComponent> getBlocksForWorkoutDisplay(){
         List<WorkoutComponent> components = new ArrayList<>();
 
         for(int i = 0; i < blocks.size(); i++){
-            /*if(i == 0){
-                components.add(new WorkoutStart());
-            }else{
-                components.add(new WorkoutBlockStart());
-            }*/
             components.addAll(blocks.get(i).getComponents());
         }
         return components;
@@ -86,11 +89,24 @@ public class Workout{
     }
 
     public static String toJsonString(Workout workout){
-        return new Gson().toJson(workout);
+        String string = null;
+
+        try {
+            string = objectMapper.writeValueAsString(workout);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return string;
     }
 
     public static Workout toWorkoutObject(String string){
-        return new Gson().fromJson(string,new TypeToken<Workout>(){}.getType());
+        Workout workout = null;
+        try {
+            workout = objectMapper.readValue(string,Workout.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workout;
     }
 
     @Override

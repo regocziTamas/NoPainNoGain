@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class WorkoutDisplayFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnExerciseDoneListener mListener;
     private String exerciseName;
     private String reps;
 
@@ -55,7 +55,7 @@ public class WorkoutDisplayFragment extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onFragmentInteraction();
+                mListener.onExerciseDone();
             }
         });
         return view;
@@ -67,8 +67,8 @@ public class WorkoutDisplayFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnExerciseDoneListener) {
+            mListener = (OnExerciseDoneListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -82,7 +82,7 @@ public class WorkoutDisplayFragment extends Fragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction();
+    public interface OnExerciseDoneListener {
+        void onExerciseDone();
     }
 }

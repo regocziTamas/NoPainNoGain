@@ -2,11 +2,13 @@ package com.codecool.nopainnogain.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+import java.io.IOException;
 
 @Entity(tableName = "exercise")
 public class Exercise{
@@ -21,11 +23,15 @@ public class Exercise{
     @PrimaryKey(autoGenerate = true)
     private Long id;
 
+    private static ObjectMapper objectMapper = new ObjectMapper().enableDefaultTyping();
+
     public Exercise(String name, String description, ExerciseTarget target) {
         this.name = name;
         this.description = description;
         this.target = target;
     }
+
+    public Exercise(){}
 
     public String getName() {
         return name;
@@ -61,15 +67,27 @@ public class Exercise{
 
     @Override
     public String toString() {
-        return "ID: "+ id + " "+ name;
+        return name;
     }
 
     public static String toJsonString(Exercise exercise){
-        return new Gson().toJson(exercise);
+        String jsonString = null;
+        try {
+            jsonString = objectMapper.writeValueAsString(exercise);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 
     public static Exercise toExerciseObject(String string){
-        return new Gson().fromJson(string,new TypeToken<Exercise>(){}.getType());
+        Exercise fromJson = null;
+        try {
+            fromJson = objectMapper.readValue(string,Exercise.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fromJson;
     }
 
 
