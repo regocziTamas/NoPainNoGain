@@ -14,7 +14,9 @@ import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.sync.DatabaseSyncer;
 import com.codecool.nopainnogain.sync.ExerciseUpdateCallback;
+import com.codecool.nopainnogain.sync.WorkoutUpdateCallback;
 import com.codecool.nopainnogain.util.ExerciseListConverter;
+import com.codecool.nopainnogain.util.WorkoutListConverter;
 
 
 import java.util.Arrays;
@@ -53,6 +55,28 @@ public class App extends Application {
         App.currentWorkoutCurrentPage = currentWorkoutCurrentPage;
     }
 
+    private void addTestWorkouts(){
+        WorkoutExercise wex1 = new WorkoutExercise(10,dao.getAllExercises().get(4));
+        WorkoutExercise wex2 = new WorkoutExercise(10,dao.getAllExercises().get(5));
+        WorkoutExercise wex3 = new WorkoutExercise(10,dao.getAllExercises().get(6));
+
+        Rest rest1 = new Rest(3000);
+        Rest rest2 = new Rest(3000);
+
+        WorkoutBlock wb1 = new WorkoutBlock();
+        wb1.addComponent(wex1);
+        wb1.addComponent(rest1);
+        wb1.addComponent(wex2);
+        wb1.addComponent(rest2);
+        wb1.addComponent(wex3);
+
+        Workout testWorkout = new Workout("Short Test Workout");
+        testWorkout.addBlock(wb1);
+
+        dao.saveWorkout(testWorkout);
+
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -67,7 +91,6 @@ public class App extends Application {
         syncer.updateExercises(new ExerciseUpdateCallback() {
             @Override
             public void onExerciseUpdate(String result) {
-                System.out.println(result);
                 List<Exercise> updatedExercises = ExerciseListConverter.convertStringToExerciseList(result);
                 if(updatedExercises.isEmpty()){
 
@@ -76,8 +99,21 @@ public class App extends Application {
                         dao.saveExercise(exercise);
                     }
                 }
+                addTestWorkouts();
+            }
+        });
 
+        syncer.updateWorkouts(new WorkoutUpdateCallback() {
+            @Override
+            public void onWorkoutUpdate(String response) {
+                List<Workout> updatedWorkouts = WorkoutListConverter.convertStringToWorkoutList(response);
+                if(updatedWorkouts.isEmpty()){
 
+                }else {
+                    for(Workout workout: updatedWorkouts){
+
+                    }
+                }
             }
         });
 
@@ -108,28 +144,7 @@ public class App extends Application {
             dao.saveExercise(e);
         }
 
-        WorkoutExercise wex1 = new WorkoutExercise(10,dao.getAllExercises().get(4));
-        WorkoutExercise wex2 = new WorkoutExercise(10,dao.getAllExercises().get(5));
-        WorkoutExercise wex3 = new WorkoutExercise(10,dao.getAllExercises().get(6));
 
-        Rest rest1 = new Rest(3000);
-        Rest rest2 = new Rest(3000);
-
-        WorkoutBlock wb1 = new WorkoutBlock();
-        wb1.addComponent(wex1);
-        wb1.addComponent(rest1);
-        wb1.addComponent(wex2);
-        wb1.addComponent(rest2);
-        wb1.addComponent(wex3);
-
-        Workout testWorkout = new Workout("Short Test Workout");
-        testWorkout.addBlock(wb1);
-
-        Workout testWorkout02 = new Workout("Custom IDd Workout");
-        testWorkout02.setId(2L);
-
-        dao.saveWorkout(testWorkout);
-        dao.saveWorkout(testWorkout02);*/
 
 
         /*WorkoutExercise wex2 = new WorkoutExercise(10, dao.getAllExercises().get(0));

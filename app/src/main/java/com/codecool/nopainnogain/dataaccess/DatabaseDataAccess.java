@@ -56,6 +56,14 @@ public class DatabaseDataAccess implements DataAccess {
         return workoutDao.getWorkoutById(id);
     }
 
+    public List<Workout> getAllSyncedWorkouts() {
+        return syncedWorkoutDao.getAllWorkouts();
+    }
+
+    public Workout findSyncedWorkoutById(long id) {
+        return syncedWorkoutDao.getWorkoutById(id);
+    }
+
     @Override
     public List<Exercise> getAllExercises() {
         return exerciseDao.getAllExercises();
@@ -66,6 +74,13 @@ public class DatabaseDataAccess implements DataAccess {
         long id = workoutDao.insertWorkout(workout);
         if(id == -1){
             workoutDao.updateWorkout(workout);
+        }
+    }
+
+    public void saveSyncedWorkout(Workout workout){
+        long id = syncedWorkoutDao.insertWorkout(workout);
+        if(id == -1){
+            syncedWorkoutDao.updateWorkout(workout);
         }
     }
 
