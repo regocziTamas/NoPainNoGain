@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.codecool.nopainnogain.adapters.PlayWorkoutAdapter;
 import com.codecool.nopainnogain.model.Workout;

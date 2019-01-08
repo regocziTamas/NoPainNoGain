@@ -16,9 +16,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkoutBlock{
 
-
-    private List<WorkoutExercise> exercises = new ArrayList<>();
-    private List<Rest> rests = new ArrayList<>();
     private List<WorkoutComponent> components = new ArrayList<>();
     private int order;
     private static ObjectMapper objectMapper = new ObjectMapper().enableDefaultTyping();
@@ -32,23 +29,7 @@ public class WorkoutBlock{
         components.add(component);
     }
 
-    public void replaceExerciseByOrder(int order, WorkoutExercise newExercise){
-        WorkoutExercise toDelete = null;
-        for(WorkoutExercise ex: exercises){
-            if(ex.getOrder() == order){
-                toDelete = ex;
-            }
-        }
-        if (toDelete != null){
-            /*System.out.println("replace happening");*/
-            /*System.out.println(toDelete);
-            System.out.println(newExercise);*/
-            exercises.remove(toDelete);
-            exercises.add(order,newExercise);
-        }
 
-
-    }
 
     public List<WorkoutComponent> getComponents(){
         Collections.sort(components,new WorkoutComponentComparator());
