@@ -106,7 +106,10 @@ public class DatabaseDataAccess implements DataAccess {
 
     @Override
     public void saveExercise(Exercise exercise) {
-        exerciseDao.insertExercise(exercise);
+        long id = exerciseDao.insertExercise(exercise);
+        if(id == -1){
+            exerciseDao.updateExercise(exercise);
+        }
     }
 
     @Override

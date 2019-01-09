@@ -35,17 +35,19 @@ public class AddExercise extends AppCompatActivity {
         done = findViewById(R.id.addExerciseDone);
 
         Intent intent = getIntent();
-        Exercise exercise = Exercise.toExerciseObject(intent.getStringExtra("exercise"));
+        String exerciseJson = intent.getStringExtra("exercise");
+
         int reps = intent.getIntExtra("reps",10);
 
         /*System.out.println("On arrival: " + exercise + " Reps: " + reps);*/
 
-        if(exercise == null){
-            Exercise defaultExercise = dao.getExerciseByName("Push-up");
+        if(exerciseJson == null){
+            Exercise defaultExercise = dao.getAllExercises().get(0);
             selectedExercise = defaultExercise;
             exerciseName.setText(defaultExercise.getName());
             this.repsEditText.setText(String.valueOf(10));
         }else{
+            Exercise exercise = Exercise.toExerciseObject(exerciseJson);
             selectedExercise = exercise;
             exerciseName.setText(exercise.getName());
             repsEditText.setText(String.valueOf(reps));

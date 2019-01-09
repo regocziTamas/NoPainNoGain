@@ -1,13 +1,10 @@
 package com.codecool.nopainnogain;
 
 import android.app.Application;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 
 import com.codecool.nopainnogain.dataaccess.DataAccess;
 import com.codecool.nopainnogain.dataaccess.DatabaseDataAccess;
 import com.codecool.nopainnogain.model.Exercise;
-import com.codecool.nopainnogain.model.ExerciseTarget;
 import com.codecool.nopainnogain.model.Rest;
 import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
@@ -25,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -106,7 +102,7 @@ public class App extends Application {
                         dao.saveExercise(exercise);
                     }
                 }
-                addTestWorkouts();
+                /*addTestWorkouts();*/
             }
         });
 
@@ -132,7 +128,7 @@ public class App extends Application {
                 try {
                     ids = new ObjectMapper()
                             .enableDefaultTyping()
-                            .readValue(response,new TypeReference<List<Exercise>>() { });
+                            .readValue(response,new TypeReference<List<Long>>() { });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -155,15 +151,15 @@ public class App extends Application {
                 try {
                     ids = new ObjectMapper()
                             .enableDefaultTyping()
-                            .readValue(response,new TypeReference<List<Workout>>() { });
+                            .readValue(response,new TypeReference<List<Long>>() { });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 if(ids.isEmpty()){
-                    System.out.println("No exercise-delete updates");
+                    System.out.println("No workout-delete updates");
                 }else{
-                    System.out.println("Deleting exercises with id: " + ids);
+                    System.out.println("Deleting workout with id: " + ids);
                     for(Long id: ids){
                         dao.deleteWorkoutById(id);
                     }
