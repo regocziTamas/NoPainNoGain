@@ -30,6 +30,6 @@ public interface WorkoutDao {
     @Query("SELECT * FROM workout WHERE id LIKE :searchedId")
     public Workout getWorkoutById(Long searchedId);
 
-    @Delete
-    public void deleteWorkout(Workout workout);
+    @Query("DELETE FROM workout WHERE id LIKE :id")
+    public void deleteWorkout(Long id);
 }

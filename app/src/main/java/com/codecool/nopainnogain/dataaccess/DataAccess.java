@@ -15,8 +15,6 @@ public interface DataAccess {
 
     public void saveWorkout(Workout workout);
 
-    public void deleteWorkout(Workout workout);
-
     public Exercise getExerciseById(long id);
 
     public void saveExercise(Exercise exercise);
@@ -28,5 +26,9 @@ public interface DataAccess {
     public Workout findSyncedWorkoutById(long id);
 
     public void saveSyncedWorkout(Workout workout);
+
+    public void deleteExerciseById(Long id);
+
+    public void deleteWorkoutById(Long id);
 
 }

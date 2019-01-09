@@ -55,10 +55,7 @@ public class InMemoryDataAccess implements DataAccess{
         }
     }
 
-    @Override
-    public void deleteWorkout(Workout workout) {
 
-    }
 
     @Override
     public Exercise getExerciseById(long id) {
@@ -92,6 +89,16 @@ public class InMemoryDataAccess implements DataAccess{
 
     @Override
     public void saveSyncedWorkout(Workout workout) {
+
+    }
+
+    @Override
+    public void deleteExerciseById(Long id) {
+
+    }
+
+    @Override
+    public void deleteWorkoutById(Long id) {
 
     }
 

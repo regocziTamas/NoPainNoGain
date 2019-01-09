@@ -13,12 +13,18 @@ import com.codecool.nopainnogain.model.Workout;
 import com.codecool.nopainnogain.model.WorkoutBlock;
 import com.codecool.nopainnogain.model.WorkoutExercise;
 import com.codecool.nopainnogain.sync.DatabaseSyncer;
+import com.codecool.nopainnogain.sync.ExerciseDeleteUpdateCallback;
 import com.codecool.nopainnogain.sync.ExerciseUpdateCallback;
+import com.codecool.nopainnogain.sync.WorkoutDeleteUpdateCallback;
 import com.codecool.nopainnogain.sync.WorkoutUpdateCallback;
 import com.codecool.nopainnogain.util.ExerciseListConverter;
 import com.codecool.nopainnogain.util.WorkoutListConverter;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,8 +99,9 @@ public class App extends Application {
             public void onExerciseUpdate(String result) {
                 List<Exercise> updatedExercises = ExerciseListConverter.convertStringToExerciseList(result);
                 if(updatedExercises.isEmpty()){
-
+                    System.out.println("No Exercises to update");
                 }else{
+                    System.out.println("Updating exercises: " + updatedExercises);
                     for(Exercise exercise: updatedExercises){
                         dao.saveExercise(exercise);
                     }
@@ -108,10 +115,57 @@ public class App extends Application {
             public void onWorkoutUpdate(String response) {
                 List<Workout> updatedWorkouts = WorkoutListConverter.convertStringToWorkoutList(response);
                 if(updatedWorkouts.isEmpty()){
-
+                    System.out.println("No Workouts to update");
                 }else {
+                    System.out.println("Updating workouts: " + updatedWorkouts);
                     for(Workout workout: updatedWorkouts){
                         dao.saveSyncedWorkout(workout);
+                    }
+                }
+            }
+        });
+
+        syncer.updateDeletedExercises(new ExerciseDeleteUpdateCallback() {
+            @Override
+            public void onExerciseDeleteUpdate(String response) {
+                List<Long> ids = new ArrayList<>();
+                try {
+                    ids = new ObjectMapper()
+                            .enableDefaultTyping()
+                            .readValue(response,new TypeReference<List<Exercise>>() { });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if(ids.isEmpty()){
+                    System.out.println("No exercise-delete updates");
+                }else{
+                    System.out.println("Deleting exercises with id: " + ids);
+                    for(Long id: ids){
+                        dao.deleteExerciseById(id);
+                    }
+                }
+            }
+        });
+
+        syncer.updateDeletedWorkouts(new WorkoutDeleteUpdateCallback() {
+            @Override
+            public void onWorkoutDeleteUpdate(String response) {
+                List<Long> ids = new ArrayList<>();
+                try {
+                    ids = new ObjectMapper()
+                            .enableDefaultTyping()
+                            .readValue(response,new TypeReference<List<Workout>>() { });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if(ids.isEmpty()){
+                    System.out.println("No exercise-delete updates");
+                }else{
+                    System.out.println("Deleting exercises with id: " + ids);
+                    for(Long id: ids){
+                        dao.deleteWorkoutById(id);
                     }
                 }
             }

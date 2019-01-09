@@ -94,7 +94,7 @@ public class WorkoutDetails extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-                        dao.deleteWorkout(selectedWorkout);
+                        dao.deleteWorkoutById(selectedWorkout.getId());
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

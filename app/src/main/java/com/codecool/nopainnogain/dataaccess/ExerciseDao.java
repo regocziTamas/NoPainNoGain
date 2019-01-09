@@ -30,6 +30,9 @@ public interface ExerciseDao {
     @Query("SELECT * FROM exercise WHERE name Like :searchedName")
     public Exercise getExerciseByName(String searchedName);
 
+    @Query("DELETE FROM exercise WHERE id LIKE :id")
+    public void deleteExerciseById(Long id);
+
 
 
 }

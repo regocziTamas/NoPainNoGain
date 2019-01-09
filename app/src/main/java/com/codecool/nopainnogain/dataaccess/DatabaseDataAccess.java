@@ -88,9 +88,16 @@ public class DatabaseDataAccess implements DataAccess {
     }
 
     @Override
-    public void deleteWorkout(Workout workout) {
-        workoutDao.deleteWorkout(workout);
+    public void deleteExerciseById(Long id) {
+        exerciseDao.deleteExerciseById(id);
     }
+
+    @Override
+    public void deleteWorkoutById(Long id) {
+        workoutDao.deleteWorkout(id);
+    }
+
+
 
     @Override
     public Exercise getExerciseById(long id) {
