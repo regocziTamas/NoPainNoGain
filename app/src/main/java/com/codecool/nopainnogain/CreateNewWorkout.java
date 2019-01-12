@@ -67,6 +67,7 @@ public class CreateNewWorkout extends AppCompatActivity {
         }else{
             initializeActivityWithWorkout();
         }
+        editText.setSelection(editText.getText().length());
     }
 
 

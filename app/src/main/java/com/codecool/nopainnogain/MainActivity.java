@@ -45,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        boolean successfulUpdate = getIntent().getBooleanExtra("successfulUpdate",false);
+        String snackbarString;
+        if(successfulUpdate){
+            snackbarString = "All databases have been synced";
+        }else{
+            snackbarString = "Not all databases could be synced, please try again";
+        }
+
+        Snackbar sn = Snackbar.make(findViewById(android.R.id.content),snackbarString,Snackbar.LENGTH_LONG);
+        sn.show();
+
         mainTabAdapter = new MainTabAdapter(getSupportFragmentManager());
 
         mViewPager = findViewById(R.id.container);
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         dao = DatabaseDataAccess.getInstance();
+
     }
 
 

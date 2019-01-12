@@ -64,8 +64,8 @@ public class DatabaseSyncFileHandler {
         if(!checkLastUpdatedAvailable()){
             return 1500L;
         }else{
-            /*return readLastUpdatedTimestamp();*/
-            return 1500L;
+            return readLastUpdatedTimestamp();
+            /*return 1500L;*/
         }
     }
 

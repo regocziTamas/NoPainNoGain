@@ -106,6 +106,7 @@ public class EditBlock extends AppCompatActivity {
                 currentlyEditedWorkoutExercise.setExercise(exercise);
                 currentlyEditedWorkoutExercise.setReps(reps);
                 adapter.notifyDataSetChanged();
+                /*adapter.notifyItemChanged(currentlyEditedRest.getOrder());*/
             }
             textView.setVisibility(View.GONE);
         }
@@ -159,6 +160,7 @@ public class EditBlock extends AppCompatActivity {
 
     public void swapTwoComponentsInBlock(int order1, int order2){
         block.swapTwoComponents(order1,order2);
+        System.out.println(block);
     }
 
     public void cloneComponentToEnd(WorkoutComponent component){

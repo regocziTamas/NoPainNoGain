@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.codecool.nopainnogain.model.Exercise;
 import com.codecool.nopainnogain.model.Workout;
+import com.codecool.nopainnogain.sync.AllUpdatesDoneCallback;
+import com.codecool.nopainnogain.sync.DatabaseSyncer;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class DatabaseDataAccess implements DataAccess {
     private WorkoutDao syncedWorkoutDao;
     private WorkoutDatabase database;
     private WorkoutDatabase syncedDatabase;
+    private DatabaseSyncer syncer;
     private static DatabaseDataAccess instance = null;
 
     private DatabaseDataAccess(Context applicationContext){
@@ -23,10 +26,11 @@ public class DatabaseDataAccess implements DataAccess {
         exerciseDao = syncedDatabase.exerciseDao();
         syncedWorkoutDao = syncedDatabase.workoutDao();
         workoutDao = database.workoutDao();
+        syncer = new DatabaseSyncer(applicationContext,this);
 
-        workoutDao.deleteAllWorkouts();
+        /*workoutDao.deleteAllWorkouts();
         exerciseDao.deleteAllExercises();
-        syncedWorkoutDao.deleteAllWorkouts();
+        syncedWorkoutDao.deleteAllWorkouts();*/
     }
 
     public static void initializeDataAccess(Context applicationContext){
@@ -43,6 +47,10 @@ public class DatabaseDataAccess implements DataAccess {
         }else{
             return instance;
         }
+    }
+
+    public void syncAllDatabases(AllUpdatesDoneCallback callback){
+        syncer.syncDatabases(callback);
     }
 
 

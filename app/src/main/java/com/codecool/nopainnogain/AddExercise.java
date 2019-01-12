@@ -53,6 +53,8 @@ public class AddExercise extends AppCompatActivity {
             repsEditText.setText(String.valueOf(reps));
         }
 
+        repsEditText.setSelection(repsEditText.getText().length());
+
 
         selectNewExercise.setOnClickListener(new View.OnClickListener() {
             @Override
