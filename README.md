@@ -10,7 +10,7 @@ Using the app's Workout Editor, users are able to assemble their own workouts fr
 The app also has a Workout Store feature (though everything is free), where users can find workouts that were downloaded from a central server and were created by me. Everytime the app starts, it looks for changes in the central database on the server that were applied since the last run of the application. This way, the app's database is always synced with the central one. The exercises are synced in the same manner. 
 
 ### Technical Details
-The app written in native Java for Android. I chose this language (instead of a cross-platform mobile programming language), because I wanted to pick up something new that is not taught in Codecool, but also I wantod to maintain and deepen my existing Java knowledge. 
+The app is written in native Java for Android. I chose this language (instead of a cross-platform mobile programming language), because I wanted to pick up something new that is not taught in Codecool, but also I wantod to maintain and deepen my existing Java knowledge. 
 
 For persisting data, the app uses two SQLite databases, one for the local workouts, and one for the exercises and workouts which are synced with the backend server. On the devices, the databases are handled with Google's Room Persistence Library. In order to pass the Workout model classes back and forth between the activities, they are serialized and deserialized with Jackson.
 
