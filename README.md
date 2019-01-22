@@ -18,3 +18,4 @@ The backend server is a Spring Boot application that persists the data in a Post
 
 ### Links
 https://github.com/regocziTamas/NoPainNoGainBackend - The backend server for the application
+https://github.com/regocziTamas/NoPainNoGainAdmin - The Angular front end for the server above
