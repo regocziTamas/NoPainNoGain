@@ -12,10 +12,12 @@ The app also has a Workout Store feature (though everything is free), where user
 ### Technical Details
 The app is written in native Java for Android. I chose this language (instead of a cross-platform mobile programming language), because I wanted to pick up something new that is not taught in Codecool, but also I wanted to maintain and deepen my existing Java knowledge. 
 
-For persisting data, the app uses two SQLite databases, one for the local workouts, and one for the exercises and workouts which are synced with the backend server. On the devices, the databases are handled with Google's Room Persistence Library. In order to pass the Workout model classes back and forth between the activities, they are serialized and deserialized with Jackson.
+For persisting data, the app uses two SQLite databases, one for the local workouts, and one for the exercises and workouts which are synced with the backend server. On the devices, the databases are handled with Google's Room Persistence Library. In order to pass the Workout model instances back and forth between the activities, they are serialized and deserialized with Jackson.
 
-The backend server is a Spring Boot application that persists the data in a PostgreSQL database. 
+The backend server is a Spring Boot application that persists the data in a PostgreSQL database. The workout and exercise updates and deletes are available for the Android app to query without any authorization. However, the endpoints used by the Angular frontend to modify, delete, and add exercises and workouts are protected by a JWT based authentication and authorization system. 
+
+The Angular frontend uses Material Design for Angular by Google.
 
 ### Links
 https://github.com/regocziTamas/NoPainNoGainBackend - The backend server for the application
-https://github.com/regocziTamas/NoPainNoGainAdmin - The Angular front end for the server above
+https://github.com/regocziTamas/NoPainNoGainAdmin - The Angular frontend for the server above
